@@ -88,7 +88,7 @@
 <meta property="og:description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。 exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，可以预料的意外情况，可能并应该">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/ac/00/accba531a365e6ae39614ebfa3273900.png">
-<meta property="og:updated_time" content="2019-01-17T03:24:46.513Z">
+<meta property="og:updated_time" content="2019-01-17T03:29:48.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Throwable、Error、Exception的区别">
 <meta name="twitter:description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。 exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，可以预料的意外情况，可能并应该">
@@ -344,8 +344,10 @@
 </ul>
 <p>这段代码违反了两个原则。</p>
 <ol>
-<li>**尽量不要捕获类似于 Exception 这样的通用异常，而是应该捕获特定的异常，这里<code>thread.sleep()</code> 抛出的应该是InterruptedException。</li>
-<li><strong>不要生吞（swallow）异常</strong>。这是异常处理中要特别注意的事情，因为很可能导致出现非常难以诊断的诡异情况。</li>
+<li><p><strong>尽量不要捕获类似于 Exception 这样的通用异常，而是应该捕获特定的异常</strong>，这里<code>thread.sleep()</code> 抛出的应该是InterruptedException。</p>
+</li>
+<li><p><strong>不要生吞（swallow）异常</strong>。这是异常处理中要特别注意的事情，因为很可能导致出现非常难以诊断的诡异情况。</p>
+</li>
 </ol>
 <p>以上就是今天的总结。</p>
 
