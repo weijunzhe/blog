@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。 exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，可以预料的意外情况，可能并应该">
+<meta name="description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。&amp;lt; !–more–&amp;gt;exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Throwable、Error、Exception的区别">
 <meta property="og:url" content="http://yangweijun.top/2019/01/17/Throwable、Error、Exception的区别/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。 exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，可以预料的意外情况，可能并应该">
+<meta property="og:description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。&amp;lt; !–more–&amp;gt;exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/ac/00/accba531a365e6ae39614ebfa3273900.png">
-<meta property="og:updated_time" content="2019-01-17T03:29:48.144Z">
+<meta property="og:updated_time" content="2019-01-18T01:28:47.569Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Throwable、Error、Exception的区别">
-<meta name="twitter:description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。 exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，可以预料的意外情况，可能并应该">
+<meta name="twitter:description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。&amp;lt; !–more–&amp;gt;exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，">
 <meta name="twitter:image" content="https://static001.geekbang.org/resource/image/ac/00/accba531a365e6ae39614ebfa3273900.png">
 
 
@@ -332,8 +332,7 @@
       
 
       
-        <h4 id="理解throwable、error、exception"><a href="#理解throwable、error、exception" class="headerlink" title="理解throwable、error、exception"></a>理解throwable、error、exception</h4><p>exception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。</p>
-<p>exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，可以预料的意外情况，可能并应该被捕获，进行相应处理。</p>
+        <h4 id="理解throwable、error、exception"><a href="#理解throwable、error、exception" class="headerlink" title="理解throwable、error、exception"></a>理解throwable、error、exception</h4><p>exception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。<br>&lt; !–more–&gt;<br>exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，可以预料的意外情况，可能并应该被捕获，进行相应处理。</p>
 <p>error是指在正常情况下，不大可能出现的情况，绝大部分的error都会导致程序（比如jvm自身）处于非正常、不可恢复的状态。既然是在非正常情况下，所以不便于也不需要捕获，常见的比如OutOfMemoryError之类，都是error的子类。</p>
 <p>exception 又分为<strong>可检查</strong>（check）异常和<strong>不可检查</strong>（unchecked）异常，可检查异常必须在源代码中显式的捕获异常，这是编译器检查的一部分。不可检查的error，是Throwable 不是exception。</p>
 <p>不检查异常就是所谓的运行时异常，类似于 NullPointerException、ArrayIndexOutOfBoundsException 之类，通常是编码可以避免的逻辑错误，具体根据需要来判断是否需要捕获，并不会在编译期强制要求。</p>
