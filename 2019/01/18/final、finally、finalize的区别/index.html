@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="java,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta name="description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finallize">
+<meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yangweijun.top/2019/01/15/hello-world/index.html">
+<meta property="og:title" content="final、finally、finalize的区别">
+<meta property="og:url" content="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finallize">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-18T01:32:29.757Z">
+<meta property="og:updated_time" content="2019-01-18T02:41:10.320Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta name="twitter:title" content="final、finally、finalize的区别">
+<meta name="twitter:description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finallize">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yangweijun.top/2019/01/15/hello-world/">
+  <link rel="canonical" href="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/">
 
 
 
 
 
-  <title>Hello World | weijunzhe's blog</title>
+  <title>final、finally、finalize的区别 | weijunzhe's blog</title>
   
 
 
@@ -262,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/15/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weijunzhe">
@@ -279,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">final、finally、finalize的区别</h1>
         
 
         <div class="post-meta">
@@ -291,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-15T11:15:34+08:00">
-                2019-01-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T10:40:09+08:00">
+                2019-01-18
               </time>
             
 
@@ -329,15 +330,31 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.<br><a id="more"></a></p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <p><strong>final</strong> 可以用来修饰类、方法、变量，分别有着不同的意义，<strong>final</strong> 修饰的class代表不能被继承、<strong>final</strong> 修饰的方法表示不能被重写，<strong>final</strong> 修饰的变量表示不能被修改。</p>
+<p><strong>finally</strong> 则是java保证重点代码一定被执行的一种机制。我们可以使用 <strong>try-finally</strong> 或者 <strong>try-catch-finally</strong> 来进行类似关闭JDBC连接、保证unlock锁等动作。</p>
+<p><strong>finallize</strong> 是基础类<strong>java.lang.Object</strong>的一个方法，它的设计目的是保证对象在垃圾收集之前完成特定资源的回收。<strong>finallize</strong>机制已经不被推荐使用了，并且在<strong>JDK 9</strong>中被标记为<strong>deprecated</strong>。</p>
+<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><h5 id="final"><a href="#final" class="headerlink" title="final"></a>final</h5><ol>
+<li>我们可以将方法或者类声明成 <strong>final</strong>,这样就可以明确告诉别人，这些行为是不允许修改的。在<strong>java.lang</strong>包下面的很多类，相当一部分已经被声明成<strong>final class</strong>，在第三方类库的一些基础类中同样如此，这样能有效避免<strong>API</strong>的使用者更改一些基础功能，在某种意义上讲，这是保证平台安全的必要手段。</li>
+<li>使用final修饰参数或者变量，也可以清楚地避免意外赋值导致的编程错误，甚至，有些人明确推荐将所有方法参数、本地变量、成员变量声明成<strong>final</strong>。</li>
+<li><strong>final</strong>变量产生了某种程度的不可变（immutable）的效果，所以，可以用于保护只读数据，尤其是在并发编程中，因为明确地不能再赋值<strong>final</strong>变量，有利于减少额外的同步开销，也可以省去一些防御性拷贝的必要。</li>
+</ol>
+<blockquote>
+<p>final 也许会有性能上的好处，但是从开发实践的角度，除非有特别的考虑，不然最好不要指望这种小技巧带来所谓的性能好处，程序最好是体现它的语义目的。</p>
+</blockquote>
+<h5 id="finally"><a href="#finally" class="headerlink" title="finally"></a>finally</h5><p>对于<strong>finally</strong>，明确知道怎么使用就足够了。需要关闭的连接等资源，更推荐使用<strong>Java 7</strong>中添加的<strong>try-with-resources</strong>语句，因为通常<strong>Java</strong>平台能够更好地处理异常情况，编码量也要少很多，何乐而不为呢？</p>
+<p>另外，有一些偏门的<strong>finally</strong>问题也会被问到，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  // do something</span><br><span class="line">  System.exit(1);</span><br><span class="line">&#125; finally&#123;</span><br><span class="line">  System.out.println(“Print from finally”);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>上面的<strong>finally</strong>里面的代码是不会被执行的，这是一个特例。</p>
+</blockquote>
+<h5 id="finallize"><a href="#finallize" class="headerlink" title="finallize"></a>finallize</h5><p><strong>finallize</strong> 的执行时和垃圾收集关联在一起的，一旦实现了非空的 <strong>finallize</strong> 方法，就会导致相应的对象回收呈现数量级上的变慢，有人专门做过 <strong>benchmark</strong>，大概是 <strong>40-50</strong> 倍的下降。<br>因为，<strong>finallize</strong> 被设计成在对象<strong>被垃圾收集前</strong>调用，这意味着实现了 <strong>finallize</strong> 方法的对象是个“特殊公民”，JVM 要对它进行额外处理。<strong>finallize</strong> 本质上成为了快速回收的阻碍者，可能导致你的对象经过多个垃圾收集周期才能被回收。</p>
+<h5 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h5><ol>
+<li><strong>finall</strong>不是 immutable！<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">final List&lt;String&gt; strList = new ArrayList&lt;&gt;();</span><br><span class="line">strList.add(&quot;Hello&quot;);</span><br><span class="line">strList.add(&quot;world&quot;);  </span><br><span class="line">List&lt;String&gt; unmodifiableStrList = List.of(&quot;hello&quot;, &quot;world&quot;);</span><br><span class="line">unmodifiableStrList.add(&quot;again&quot;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p><strong>final</strong> 只能约束strList这个引用不可被赋值，但是strList 对象行为不被 <strong>final</strong> 影响，添加元素等操作是完全正常的。如果我们真的希望对象本身是不可变的，那么需要相应的类支持不可变的行为。在上面的这个例子中，<a href="http://openjdk.java.net/jeps/269" target="_blank" rel="noopener">List.of方法</a>创建的本身就是不可变的 List，最后那句 <strong>add</strong> 是会在运行时抛出异常的。</p>
+</blockquote>
+<p>以上就是今天的总结。</p>
 
       
     </div>
@@ -382,6 +399,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
 
       
       
@@ -391,15 +414,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/01/17/Throwable、Error、Exception的区别/" rel="next" title="Throwable、Error、Exception的区别">
+                <i class="fa fa-chevron-left"></i> Throwable、Error、Exception的区别
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/15/谈谈对Java的理解/" rel="prev" title="谈谈对java的理解">
-                谈谈对java的理解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -584,7 +607,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#适用场景"><span class="nav-number">1.</span> <span class="nav-text">适用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#final"><span class="nav-number">1.1.</span> <span class="nav-text">final</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#finally"><span class="nav-number">1.2.</span> <span class="nav-text">finally</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#finallize"><span class="nav-number">1.3.</span> <span class="nav-text">finallize</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#拓展"><span class="nav-number">1.4.</span> <span class="nav-text">拓展</span></a></li></ol></li></ol></div>
             
 
           </div>
