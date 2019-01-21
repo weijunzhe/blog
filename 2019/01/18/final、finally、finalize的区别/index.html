@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
 <meta property="og:description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finalize 是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-21T01:39:17.003Z">
+<meta property="og:updated_time" content="2019-01-21T02:15:22.401Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="final、finally、finalize的区别">
 <meta name="twitter:description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finalize 是">
@@ -333,7 +333,7 @@
         <p><strong>final</strong> 可以用来修饰类、方法、变量，分别有着不同的意义，<strong>final</strong> 修饰的class代表不能被继承、<strong>final</strong> 修饰的方法表示不能被重写，<strong>final</strong> 修饰的变量表示不能被修改。</p>
 <p><strong>finally</strong> 则是java保证重点代码一定被执行的一种机制。我们可以使用 <strong>try-finally</strong> 或者 <strong>try-catch-finally</strong> 来进行类似关闭JDBC连接、保证unlock锁等动作。</p>
 <p><strong>finalize</strong> 是基础类<strong>java.lang.Object</strong>的一个方法，它的设计目的是保证对象在垃圾收集之前完成特定资源的回收。<strong>finalize</strong>机制已经不被推荐使用了，并且在<strong>JDK 9</strong>中被标记为<strong>deprecated</strong>。</p>
-<p>[]</p>
+<a id="more"></a>
 <h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><h5 id="final"><a href="#final" class="headerlink" title="final"></a>final</h5><ol>
 <li>我们可以将方法或者类声明成 <strong>final</strong>,这样就可以明确告诉别人，这些行为是不允许修改的。在<strong>java.lang</strong>包下面的很多类，相当一部分已经被声明成<strong>final class</strong>，在第三方类库的一些基础类中同样如此，这样能有效避免<strong>API</strong>的使用者更改一些基础功能，在某种意义上讲，这是保证平台安全的必要手段。</li>
 <li>使用final修饰参数或者变量，也可以清楚地避免意外赋值导致的编程错误，甚至，有些人明确推荐将所有方法参数、本地变量、成员变量声明成<strong>final</strong>。</li>
