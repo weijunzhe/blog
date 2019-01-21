@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
 <meta property="og:description" content="不同的引用类型，主要体现的是对象不同的可达性（reachable）状态和对垃圾收集的影响。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-21T02:14:58.388Z">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/36/b0/36d3c7b158eda9421ef32463cb4d4fb0.png">
+<meta property="og:updated_time" content="2019-01-21T02:18:21.998Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="强引用、软引用、弱引用、幻象引用有什么区别">
 <meta name="twitter:description" content="不同的引用类型，主要体现的是对象不同的可达性（reachable）状态和对垃圾收集的影响。">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/36/b0/36d3c7b158eda9421ef32463cb4d4fb0.png">
 
 
 
@@ -337,7 +339,7 @@
 <h4 id="知识扩展"><a href="#知识扩展" class="headerlink" title="知识扩展"></a>知识扩展</h4><ol>
 <li>对象可达性状态流转分析</li>
 </ol>
-<p>首先，请看下面的流程图，这里简单总结了对象生命周期和不同可达性状态，以及不同状态可能达到改变关系，可能未必100%严谨，来阐述下可达性的变化。<br><a href="https://static001.geekbang.org/resource/image/36/b0/36d3c7b158eda9421ef32463cb4d4fb0.png" target="_blank" rel="noopener">对象可达性状态流转分析</a></p>
+<p>首先，请看下面的流程图，这里简单总结了对象生命周期和不同可达性状态，以及不同状态可能达到改变关系，可能未必100%严谨，来阐述下可达性的变化。<br><img src="https://static001.geekbang.org/resource/image/36/b0/36d3c7b158eda9421ef32463cb4d4fb0.png" alt="对象可达性状态流转分析"></p>
 <p>上图是Java 定义的不同可达性级别（reachability level），具体如下：</p>
 <ul>
 <li>强可达（Strongly Reachable），就是当一个对象可以有一个或多个线程可以不通过各种引用访问到的情况。比如，我们新创建一个对象，那么创建它的线程对它就是强可达。</li>
