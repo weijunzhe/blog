@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="python,">
+  <meta name="keywords" content="java,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="知识图谱  https://blog.csdn.net/nlphacker/article/details/39455663https://www.jianshu.com/p/4f09043e22ea?from=timelinehttps://blog.csdn.net/richgene/article/details/80481044https://www.jiqizhixin.com/arti">
-<meta name="keywords" content="python">
+<meta name="description" content="区别String 是 Java 语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。">
+<meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="知识图谱相关资料整理">
-<meta property="og:url" content="http://yangweijun.top/2019/01/16/知识图谱相关资料整理/index.html">
+<meta property="og:title" content="String、StringBuffer、StringBuilder的区别">
+<meta property="og:url" content="http://yangweijun.top/2019/01/22/String、StringBuffer、StringBuilder的区别/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="知识图谱  https://blog.csdn.net/nlphacker/article/details/39455663https://www.jianshu.com/p/4f09043e22ea?from=timelinehttps://blog.csdn.net/richgene/article/details/80481044https://www.jiqizhixin.com/arti">
+<meta property="og:description" content="区别String 是 Java 语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-21T07:18:48.990Z">
+<meta property="og:updated_time" content="2019-01-22T02:08:29.343Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="知识图谱相关资料整理">
-<meta name="twitter:description" content="知识图谱  https://blog.csdn.net/nlphacker/article/details/39455663https://www.jianshu.com/p/4f09043e22ea?from=timelinehttps://blog.csdn.net/richgene/article/details/80481044https://www.jiqizhixin.com/arti">
+<meta name="twitter:title" content="String、StringBuffer、StringBuilder的区别">
+<meta name="twitter:description" content="区别String 是 Java 语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yangweijun.top/2019/01/16/知识图谱相关资料整理/">
+  <link rel="canonical" href="http://yangweijun.top/2019/01/22/String、StringBuffer、StringBuilder的区别/">
 
 
 
 
 
-  <title>知识图谱相关资料整理 | weijunzhe's blog</title>
+  <title>String、StringBuffer、StringBuilder的区别 | weijunzhe's blog</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/16/知识图谱相关资料整理/">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/22/String、StringBuffer、StringBuilder的区别/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weijunzhe">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">知识图谱相关资料整理</h1>
+          <h1 class="post-title" itemprop="name headline">String、StringBuffer、StringBuilder的区别</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-16T15:44:28+08:00">
-                2019-01-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-22T10:08:00+08:00">
+                2019-01-22
               </time>
             
 
@@ -330,56 +330,21 @@
       
 
       
-        <h3 id="知识图谱"><a href="#知识图谱" class="headerlink" title="知识图谱"></a>知识图谱</h3><blockquote>
-<blockquote>
-<p><a href="https://blog.csdn.net/nlphacker/article/details/39455663" target="_blank" rel="noopener">https://blog.csdn.net/nlphacker/article/details/39455663</a><br><a href="https://www.jianshu.com/p/4f09043e22ea?from=timeline" target="_blank" rel="noopener">https://www.jianshu.com/p/4f09043e22ea?from=timeline</a><br><a href="https://blog.csdn.net/richgene/article/details/80481044" target="_blank" rel="noopener">https://blog.csdn.net/richgene/article/details/80481044</a><br><a href="https://www.jiqizhixin.com/articles/2018-06-20-4?tdsourcetag=s_pctim_aiomsg" target="_blank" rel="noopener">https://www.jiqizhixin.com/articles/2018-06-20-4?tdsourcetag=s_pctim_aiomsg</a><br><a id="more"></a><br>数学识别<br><a href="https://edu.aliyun.com/course/26?spm=a2c0j.103967.772922.1.7402ed64U28fhB" target="_blank" rel="noopener">https://edu.aliyun.com/course/26?spm=a2c0j.103967.772922.1.7402ed64U28fhB</a></p>
-</blockquote>
-</blockquote>
-<h3 id="知识图谱相关"><a href="#知识图谱相关" class="headerlink" title="知识图谱相关"></a>知识图谱相关</h3><blockquote>
-<p>百度AI视频</p>
-<blockquote>
-<p><a href="https://ai.baidu.com/support/video" target="_blank" rel="noopener">https://ai.baidu.com/support/video</a></p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>scikit开发文档</p>
-<blockquote>
-<p><a href="http://cwiki.apachecn.org/pages/viewpage.action?pageId=10031359" target="_blank" rel="noopener">http://cwiki.apachecn.org/pages/viewpage.action?pageId=10031359</a><br><a href="http://cwiki.apachecn.org/pages/viewpage.action?pageId=10031359" target="_blank" rel="noopener">http://cwiki.apachecn.org/pages/viewpage.action?pageId=10031359</a>    </p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>基本概念</p>
-<blockquote>
-<p><a href="https://blog.csdn.net/wyqwilliam/article/details/81676785" target="_blank" rel="noopener">https://blog.csdn.net/wyqwilliam/article/details/81676785</a></p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>小白学数据分析 关联分析理论篇</p>
-<blockquote>
-<p><a href="http://blog.sina.cn/dpool/blog/s/blog_13bb711fd0102wcwl.html" target="_blank" rel="noopener">http://blog.sina.cn/dpool/blog/s/blog_13bb711fd0102wcwl.html</a></p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>基于Python的机器学习实战：Apriori</p>
-<blockquote>
-<p><a href="https://www.cnblogs.com/90zeng/p/apriori.html#contents" target="_blank" rel="noopener">https://www.cnblogs.com/90zeng/p/apriori.html#contents</a></p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>Python文章相关性分析—金庸武侠小说分析</p>
-<blockquote>
-<p><a href="http://m.mamicode.com/info-detail-2159455.html" target="_blank" rel="noopener">http://m.mamicode.com/info-detail-2159455.html</a></p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>相关文章</p>
-<ul>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MzUyMDk1MDY2MQ==&amp;mid=2247483882&amp;idx=1&amp;sn=e5e95ec19eca42e5247cdde60c12316f&amp;chksm=f9e3c700ce944e169315b1c59f8cadbf912d8ab39c86963261babe8f529ba1fdf125d4d0fb20&amp;mpshare=1&amp;scene=1&amp;srcid=011805dei3oRnSkOciocJyia#rd" target="_blank" rel="noopener">【Python金融量化】财经新闻文本分析</a></li>
-<li><a href="http://m.xinwenlianbo.tv/wenzigao/" target="_blank" rel="noopener">新闻联播文字版手机版</a></li>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MzA5MjEyMTYwMg==&amp;mid=2650242716&amp;idx=1&amp;sn=72e8c3ef7673d2134ac3b1ccca68d326&amp;chksm=887221f1bf05a8e704be8aca46b0a46e8ee853311427c4761d66a53de7c24e66eda528d0ae69&amp;mpshare=1&amp;scene=1&amp;srcid=0118UN55fesCUcwt0MqPLf2G#rd" target="_blank" rel="noopener">数据思维实践 | TASK 12 文本分析</a></li>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MzA5MjEyMTYwMg==&amp;mid=2650242716&amp;idx=1&amp;sn=72e8c3ef7673d2134ac3b1ccca68d326&amp;chksm=887221f1bf05a8e704be8aca46b0a46e8ee853311427c4761d66a53de7c24e66eda528d0ae69&amp;mpshare=1&amp;scene=1&amp;srcid=0118UN55fesCUcwt0MqPLf2G#rd" target="_blank" rel="noopener">数据思维实践 | TASK 12 文本分析</a></li>
-</ul>
-</blockquote>
+        <h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>String 是 Java 语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。<br><a id="more"></a><br>StringBuffer 是为了解决上面提到的字符串拼接产生太多中间对象的问题而提供的一个类，我们可以用append 或者 add 方法，把字符串添加到已有序列的末尾或者指定位置。StringBuffer 本质是一个线程安全的可修改字符序列，它保证了线程安全，也随之带来了额外的性能开销，所以除非有线程安全的需要，不然还是推荐使用它的后继者，也就是StringBuilder。</p>
+<p>StringBuilder 是 Java 1.5 中新增的， 在能力上和 StringBuffer 没有本质区别，但是它去掉了线程安全的部分，有效减少了开销，是绝大部分情况下进行字符串拼接的首选。</p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><ol>
+<li><p>字符串的设计与实现考量<br>String 是 Immutable 类的典型实现，原生的保证了基础线程安全，因为你无法对它内部数据进行任何修改，这种便利甚至体现在拷贝构造函数中，由于不可变，Immutable 对象在拷贝时不需要额外复制数据。</p>
+</li>
+<li><p>字符串缓存<br>如果把常见应用进行堆转存（Dump Heap），然后分析对象组成，会发现平均25%的对象是字符串，并且其中约半数是重复的。如果能避免创建重复字符串，可以有效降低内存消耗和对象创建开销。</p>
+</li>
+<li><p>String自身的演化<br>在Java的字符串历史版本中，它是使用char数组来存储数据的，这样非常直接。但是Java中的char是两个bytes大小，拉丁语系语言的字符，根本就不需要太宽的char，这样无区别的实现就造成了一定的浪费。密度是编程语言平台永恒的话题，因为归根结底绝大部分任务是要来操作数据的。</p>
+</li>
+</ol>
+<p>在Java 6 的时候，Oracle JDK 就提供了压缩字符串的特性，但是这个特性的实现并不是开源的，而是在实践中也暴露出了一些问题，所以在最新的JDK版本中已经将它移除了。</p>
+<p>在 Java 9中，我们引入Compact Strings的设计，对字符串进行了大刀阔斧的改进。将数据存储方式从char数组，改变为一个byte数组加上一个标识编码的所谓coder，并且将相关字符串操作类都进行了修改。另外，所有相关的Intrinsic之类也都进行了重写，以保证没有任何性能损失。</p>
+<p>当然，在极端情况下，字符串也出现了一些能力退化，比如最大字符串的大小。可以思考下，原来char数组的实现，字符串的最大长度就是数组本身的长度限制，但是替换成byte数组，同样数组长度下，存储能力是退化了一倍的！还好这是存在于理论上的极限，还没有发现现实应用受此影响。</p>
+<p>在通用的性能测试和产品实验中，我们能非常明显地看到紧凑字符串带来的优势，<strong>更小的内存占用、更快的 操作速度</strong>。</p>
+<p>以上就是今天的总结。</p>
 
       
     </div>
@@ -426,7 +391,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/python/" rel="tag"># python</a>
+            <a href="/tags/java/" rel="tag"># java</a>
           
         </div>
       
@@ -439,8 +404,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/15/谈谈对Java的理解/" rel="next" title="谈谈对java的理解">
-                <i class="fa fa-chevron-left"></i> 谈谈对java的理解
+              <a href="/2019/01/21/强引用、软引用、弱引用、幻象引用有什么区别/" rel="next" title="强引用、软引用、弱引用、幻象引用有什么区别">
+                <i class="fa fa-chevron-left"></i> 强引用、软引用、弱引用、幻象引用有什么区别
               </a>
             
           </div>
@@ -448,10 +413,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/17/Throwable、Error、Exception的区别/" rel="prev" title="Throwable、Error、Exception的区别">
-                Throwable、Error、Exception的区别 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -636,7 +597,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#知识图谱"><span class="nav-number">1.</span> <span class="nav-text">知识图谱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#知识图谱相关"><span class="nav-number">2.</span> <span class="nav-text">知识图谱相关</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#区别"><span class="nav-number">1.</span> <span class="nav-text">区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展"><span class="nav-number">2.</span> <span class="nav-text">扩展</span></a></li></ol></div>
             
 
           </div>
