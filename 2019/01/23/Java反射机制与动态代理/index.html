@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。">
+<meta name="description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。 动态代理动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Throwable、Error、Exception的区别">
-<meta property="og:url" content="http://yangweijun.top/2019/01/17/Throwable、Error、Exception的区别/index.html">
+<meta property="og:title" content="Java反射机制与动态代理">
+<meta property="og:url" content="http://yangweijun.top/2019/01/23/Java反射机制与动态代理/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。">
+<meta property="og:description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。 动态代理动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/ac/00/accba531a365e6ae39614ebfa3273900.png">
-<meta property="og:updated_time" content="2019-01-18T01:33:16.887Z">
+<meta property="og:updated_time" content="2019-01-23T02:33:04.661Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Throwable、Error、Exception的区别">
-<meta name="twitter:description" content="理解throwable、error、exceptionexception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。">
-<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/ac/00/accba531a365e6ae39614ebfa3273900.png">
+<meta name="twitter:title" content="Java反射机制与动态代理">
+<meta name="twitter:description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。 动态代理动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yangweijun.top/2019/01/17/Throwable、Error、Exception的区别/">
+  <link rel="canonical" href="http://yangweijun.top/2019/01/23/Java反射机制与动态代理/">
 
 
 
 
 
-  <title>Throwable、Error、Exception的区别 | weijunzhe's blog</title>
+  <title>Java反射机制与动态代理 | weijunzhe's blog</title>
   
 
 
@@ -265,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/17/Throwable、Error、Exception的区别/">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/23/Java反射机制与动态代理/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weijunzhe">
@@ -282,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Throwable、Error、Exception的区别</h1>
+          <h1 class="post-title" itemprop="name headline">Java反射机制与动态代理</h1>
         
 
         <div class="post-meta">
@@ -294,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-17T11:24:20+08:00">
-                2019-01-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-23T10:32:33+08:00">
+                2019-01-23
               </time>
             
 
@@ -332,22 +330,27 @@
       
 
       
-        <h4 id="理解throwable、error、exception"><a href="#理解throwable、error、exception" class="headerlink" title="理解throwable、error、exception"></a>理解throwable、error、exception</h4><p>exception 和 error 都继承了throwable类，在Java中只有继承了throwable类型的实例才可以被抛出（throw）或着捕获（catch），他是异常处理的基本处理类型。<br><a id="more"></a><br>exception 和 error 体现了Java平台设计者对不同异常情况的分类。exception 是程序运行时异常，可以预料的意外情况，可能并应该被捕获，进行相应处理。</p>
-<p>error是指在正常情况下，不大可能出现的情况，绝大部分的error都会导致程序（比如jvm自身）处于非正常、不可恢复的状态。既然是在非正常情况下，所以不便于也不需要捕获，常见的比如OutOfMemoryError之类，都是error的子类。</p>
-<p>exception 又分为<strong>可检查</strong>（check）异常和<strong>不可检查</strong>（unchecked）异常，可检查异常必须在源代码中显式的捕获异常，这是编译器检查的一部分。不可检查的error，是Throwable 不是exception。</p>
-<p>不检查异常就是所谓的运行时异常，类似于 NullPointerException、ArrayIndexOutOfBoundsException 之类，通常是编码可以避免的逻辑错误，具体根据需要来判断是否需要捕获，并不会在编译期强制要求。</p>
-<h4 id="throwable、error、exception关系图"><a href="#throwable、error、exception关系图" class="headerlink" title="throwable、error、exception关系图"></a>throwable、error、exception关系图</h4><p><img src="https://static001.geekbang.org/resource/image/ac/00/accba531a365e6ae39614ebfa3273900.png" alt="throwable和error、exception类图"></p>
-<h4 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h4><ul>
-<li>下面代码有什么不当之处？<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> try &#123;</span><br><span class="line">  // 业务代码</span><br><span class="line">  // …</span><br><span class="line">  Thread.sleep(1000L);</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">  // Ignore it</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+        <h5 id="反射机制"><a href="#反射机制" class="headerlink" title="反射机制"></a>反射机制</h5><p>反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时<strong>自省</strong>（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。</p>
+<h5 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h5><p>动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）。</p>
+<p>实现动态代理的方式很多，比如 JDK 自身提供的动态代理，就是主要利用了上面提到的反射机制。还有其他的实现方式，比如利用传说中更高性能的字节码操作机制，类似 ASM、cglib（基于ASM）、javassist等。</p>
+<p>首先，他是一个<strong>代理机制</strong>。如果熟悉设计模式中的代理模式，我们就会知道，代理可以看作对调用目标的一个包装，这样我们对目标代码的调用不是直接发生的，而是通过代理完成的。其实很多动态代理场景，我认为也可以看作是装饰器（Decorator）模式的应用。</p>
+<p>通过代理可以然调用者与实现者之间<strong>解耦</strong>。比如进行RPC调用，框架内部的寻址、序列化、反序列化等，对于调用者往往是没有太大意义的，通过代理，可以提供更加友善的界面。</p>
+<p>代理的发展经历了静态到动态的过程，源于静态代理引入的额外工作。类似早期的 RMI 之类古董技术，还需要 rmic 之类工具生成静态 stub 等各种文件，增加了很多繁琐的准备工作，而这又和我们的业务逻辑没有关系。利用动态代理机制，相应的 stub 等类，可以在运行时生成，对应的调用操作也是动态完成，极大地提高了我们的生产力。改进后的 RMI 已经不再需要手动去准备这些了，虽然它仍然时相对古老落后的技术，未来也许会逐步被移除。</p>
+<h5 id="代理的方式"><a href="#代理的方式" class="headerlink" title="代理的方式"></a>代理的方式</h5><h6 id="JDK-动态代理"><a href="#JDK-动态代理" class="headerlink" title="JDK 动态代理"></a>JDK 动态代理</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public class MyDynamicProxy &#123;</span><br><span class="line">    public static  void main (String[] args) &#123;</span><br><span class="line">        HelloImpl hello = new HelloImpl();</span><br><span class="line">        MyInvocationHandler handler = new MyInvocationHandler(hello);</span><br><span class="line">        // 构造代码实例</span><br><span class="line">        Hello proxyHello = (Hello) Proxy.newProxyInstance(HelloImpl.class.getClassLoader(), HelloImpl.class.getInterfaces(), handler);</span><br><span class="line">        // 调用代理方法</span><br><span class="line">        proxyHello.sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">interface Hello &#123;</span><br><span class="line">    void sayHello();</span><br><span class="line">&#125;</span><br><span class="line">class HelloImpl implements  Hello &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void sayHello() &#123;</span><br><span class="line">        System.out.println(&quot;Hello World&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> class MyInvocationHandler implements InvocationHandler &#123;</span><br><span class="line">    private Object target;</span><br><span class="line">    public MyInvocationHandler(Object target) &#123;</span><br><span class="line">        this.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(Object proxy, Method method, Object[] args)</span><br><span class="line">            throws Throwable &#123;</span><br><span class="line">        System.out.println(&quot;Invoking sayHello&quot;);</span><br><span class="line">        Object result = method.invoke(target, args);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的JDK Proxy 例子，非常简单地实现了动态代理的构建和代理操作。首先，实现对应的 InvocationHandler；然后，以接口 Hello 为纽带， 为被调用目标构建代理对象，进而应用程序就可以使用代理对象间接运行调用目标的逻辑，代理为应用插入额外逻辑（这里时println）提供了便利的入口。</p>
+<h6 id="cglib动态代理"><a href="#cglib动态代理" class="headerlink" title="cglib动态代理"></a>cglib动态代理</h6><p>cglib 动态代理采用的是创建目标类的子类的方式，因为是子类化，我们可以达到近似使用被调用者本身的效果。在Spring 编程中，框架通常会处理这种情况，当然我们也可以显式指定。</p>
+<p>JDK Proxy 的优势：</p>
+<ul>
+<li>最小化依赖关系，减少依赖意味着简化开发和维护，JDK 本身的支持，可能比 cglib 更加可靠。</li>
+<li>平滑进行 JDK 版本升级，而字节码类库通常需求进行更新以保证在新版 Java 上能够使用。</li>
+<li>代码实现简单。</li>
 </ul>
-<p>这段代码违反了两个原则。</p>
-<ol>
-<li><p><strong>尽量不要捕获类似于 Exception 这样的通用异常，而是应该捕获特定的异常</strong>，这里<code>thread.sleep()</code> 抛出的应该是InterruptedException。</p>
-</li>
-<li><p><strong>不要生吞（swallow）异常</strong>。这是异常处理中要特别注意的事情，因为很可能导致出现非常难以诊断的诡异情况。</p>
-</li>
-</ol>
+<p>基于类似cglib 框架的优势</p>
+<ul>
+<li>有的时候调用目标可能不便实现额外接口，从某种角度看，限定调用者实现接口是有些侵入性的实践，类似 cglib 动态代理就没有这种限制。</li>
+<li>只操作我们关心的类，而不必为其他相关类增加工作量。</li>
+<li>高性能。</li>
+</ul>
 <p>以上就是今天的总结。</p>
 
       
@@ -408,8 +411,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/16/知识图谱相关资料整理/" rel="next" title="知识图谱相关资料整理">
-                <i class="fa fa-chevron-left"></i> 知识图谱相关资料整理
+              <a href="/2019/01/22/String、StringBuffer、StringBuilder的区别/" rel="next" title="String、StringBuffer、StringBuilder的区别">
+                <i class="fa fa-chevron-left"></i> String、StringBuffer、StringBuilder的区别
               </a>
             
           </div>
@@ -417,10 +420,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/18/final、finally、finalize的区别/" rel="prev" title="final、finally、finalize的区别">
-                final、finally、finalize的区别 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -605,7 +604,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#理解throwable、error、exception"><span class="nav-number">1.</span> <span class="nav-text">理解throwable、error、exception</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#throwable、error、exception关系图"><span class="nav-number">2.</span> <span class="nav-text">throwable、error、exception关系图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拓展"><span class="nav-number">3.</span> <span class="nav-text">拓展</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#反射机制"><span class="nav-number">1.</span> <span class="nav-text">反射机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#动态代理"><span class="nav-number">2.</span> <span class="nav-text">动态代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代理的方式"><span class="nav-number">3.</span> <span class="nav-text">代理的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#JDK-动态代理"><span class="nav-number">3.1.</span> <span class="nav-text">JDK 动态代理</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#cglib动态代理"><span class="nav-number">3.2.</span> <span class="nav-text">cglib动态代理</span></a></li></ol></li></ol></div>
             
 
           </div>
