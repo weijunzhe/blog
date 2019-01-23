@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。 动态代理动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）">
+<meta name="description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java反射机制与动态代理">
 <meta property="og:url" content="http://yangweijun.top/2019/01/23/Java反射机制与动态代理/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。 动态代理动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）">
+<meta property="og:description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-23T02:33:04.661Z">
+<meta property="og:updated_time" content="2019-01-23T02:38:39.904Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java反射机制与动态代理">
-<meta name="twitter:description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。 动态代理动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）">
+<meta name="twitter:description" content="反射机制反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。">
 
 
 
@@ -330,7 +330,7 @@
       
 
       
-        <h5 id="反射机制"><a href="#反射机制" class="headerlink" title="反射机制"></a>反射机制</h5><p>反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时<strong>自省</strong>（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。</p>
+        <h5 id="反射机制"><a href="#反射机制" class="headerlink" title="反射机制"></a>反射机制</h5><p>反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时<strong>自省</strong>（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。<br><a id="more"></a></p>
 <h5 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h5><p>动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）。</p>
 <p>实现动态代理的方式很多，比如 JDK 自身提供的动态代理，就是主要利用了上面提到的反射机制。还有其他的实现方式，比如利用传说中更高性能的字节码操作机制，类似 ASM、cglib（基于ASM）、javassist等。</p>
 <p>首先，他是一个<strong>代理机制</strong>。如果熟悉设计模式中的代理模式，我们就会知道，代理可以看作对调用目标的一个包装，这样我们对目标代码的调用不是直接发生的，而是通过代理完成的。其实很多动态代理场景，我认为也可以看作是装饰器（Decorator）模式的应用。</p>

@@ -332,34 +332,17 @@
 
       
         
-          
-            <h5 id="反射机制"><a href="#反射机制" class="headerlink" title="反射机制"></a>反射机制</h5><p>反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时<strong>自省</strong>（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。</p>
-<h5 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h5><p>动态代理是一种方便运行动态构建代理、动态处理代理调用的机制，很多场景都是利用类似机制做到的，比如用来包装RPC调用、面向切面的编程（AOP）。</p>
-<p>实现动态代理的方式很多，比如 JDK 自身提供的动态代理，就是主要利用了上面提到的反射机制。还有其他的实现方式，比如利用传说中更高性能的字节码操作机制，类似 ASM、cglib（基于ASM）、javassist等。</p>
-<p>首先，他是一个<strong>代理机制</strong>。如果熟悉设计模式中的代理模式，我们就会知道，代理可以看作对调用目标的一个包装，这样我们对目标代码的调用不是直接发生的，而是通过代理完成的。其实很多动态代理场景，我认为也可以看作是装饰器（Decorator）模式的应用。</p>
-<p>通过代理可以然调用者与实现者之间<strong>解耦</strong>。比如进行RPC调用，框架内部的寻址、序列化、反序列化等，对于调用者往往是没有太大意义的，通过代理，可以提供更加友善的界面。</p>
-<p>代理的发展经历了静态到动态的过程，源于静态代理引入的额外工作。类似早期的 RMI 之类古董技术，还需要 rmic 之类工具生成静态 stub 等各种文件，增加了很多繁琐的准备工作，而这又和我们的业务逻辑没有关系。利用动态代理机制，相应的 stub 等类，可以在运行时生成，对应的调用操作也是动态完成，极大地提高了我们的生产力。改进后的 RMI 已经不再需要手动去准备这些了，虽然它仍然时相对古老落后的技术，未来也许会逐步被移除。</p>
-<h5 id="代理的方式"><a href="#代理的方式" class="headerlink" title="代理的方式"></a>代理的方式</h5><h6 id="JDK-动态代理"><a href="#JDK-动态代理" class="headerlink" title="JDK 动态代理"></a>JDK 动态代理</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public class MyDynamicProxy &#123;</span><br><span class="line">    public static  void main (String[] args) &#123;</span><br><span class="line">        HelloImpl hello = new HelloImpl();</span><br><span class="line">        MyInvocationHandler handler = new MyInvocationHandler(hello);</span><br><span class="line">        // 构造代码实例</span><br><span class="line">        Hello proxyHello = (Hello) Proxy.newProxyInstance(HelloImpl.class.getClassLoader(), HelloImpl.class.getInterfaces(), handler);</span><br><span class="line">        // 调用代理方法</span><br><span class="line">        proxyHello.sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">interface Hello &#123;</span><br><span class="line">    void sayHello();</span><br><span class="line">&#125;</span><br><span class="line">class HelloImpl implements  Hello &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void sayHello() &#123;</span><br><span class="line">        System.out.println(&quot;Hello World&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> class MyInvocationHandler implements InvocationHandler &#123;</span><br><span class="line">    private Object target;</span><br><span class="line">    public MyInvocationHandler(Object target) &#123;</span><br><span class="line">        this.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(Object proxy, Method method, Object[] args)</span><br><span class="line">            throws Throwable &#123;</span><br><span class="line">        System.out.println(&quot;Invoking sayHello&quot;);</span><br><span class="line">        Object result = method.invoke(target, args);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的JDK Proxy 例子，非常简单地实现了动态代理的构建和代理操作。首先，实现对应的 InvocationHandler；然后，以接口 Hello 为纽带， 为被调用目标构建代理对象，进而应用程序就可以使用代理对象间接运行调用目标的逻辑，代理为应用插入额外逻辑（这里时println）提供了便利的入口。</p>
-<h6 id="cglib动态代理"><a href="#cglib动态代理" class="headerlink" title="cglib动态代理"></a>cglib动态代理</h6><p>cglib 动态代理采用的是创建目标类的子类的方式，因为是子类化，我们可以达到近似使用被调用者本身的效果。在Spring 编程中，框架通常会处理这种情况，当然我们也可以显式指定。</p>
-<p>JDK Proxy 的优势：</p>
-<ul>
-<li>最小化依赖关系，减少依赖意味着简化开发和维护，JDK 本身的支持，可能比 cglib 更加可靠。</li>
-<li>平滑进行 JDK 版本升级，而字节码类库通常需求进行更新以保证在新版 Java 上能够使用。</li>
-<li>代码实现简单。</li>
-</ul>
-<p>基于类似cglib 框架的优势</p>
-<ul>
-<li>有的时候调用目标可能不便实现额外接口，从某种角度看，限定调用者实现接口是有些侵入性的实践，类似 cglib 动态代理就没有这种限制。</li>
-<li>只操作我们关心的类，而不必为其他相关类增加工作量。</li>
-<li>高性能。</li>
-</ul>
-<p>以上就是今天的总结。</p>
-
-          
+          <h5 id="反射机制"><a href="#反射机制" class="headerlink" title="反射机制"></a>反射机制</h5><p>反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时<strong>自省</strong>（introspect，官方用语）的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/23/Java反射机制与动态代理/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
     
     
     
