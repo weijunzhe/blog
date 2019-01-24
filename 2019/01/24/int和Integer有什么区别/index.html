@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="区别String 是 Java 语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。">
+<meta name="description" content="java虽然号称是面向对象的语言，但是原始数据类型仍然是重要的组成元素，所以在面试中，经常考察原始数据类型和包装类等Java语言特性。">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="String、StringBuffer、StringBuilder的区别">
-<meta property="og:url" content="http://yangweijun.top/2019/01/22/String、StringBuffer、StringBuilder的区别/index.html">
+<meta property="og:title" content="int和Integer有什么区别">
+<meta property="og:url" content="http://yangweijun.top/2019/01/24/int和Integer有什么区别/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="区别String 是 Java 语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。">
+<meta property="og:description" content="java虽然号称是面向对象的语言，但是原始数据类型仍然是重要的组成元素，所以在面试中，经常考察原始数据类型和包装类等Java语言特性。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-22T02:08:29.343Z">
+<meta property="og:updated_time" content="2019-01-24T02:07:06.701Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="String、StringBuffer、StringBuilder的区别">
-<meta name="twitter:description" content="区别String 是 Java 语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。">
+<meta name="twitter:title" content="int和Integer有什么区别">
+<meta name="twitter:description" content="java虽然号称是面向对象的语言，但是原始数据类型仍然是重要的组成元素，所以在面试中，经常考察原始数据类型和包装类等Java语言特性。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yangweijun.top/2019/01/22/String、StringBuffer、StringBuilder的区别/">
+  <link rel="canonical" href="http://yangweijun.top/2019/01/24/int和Integer有什么区别/">
 
 
 
 
 
-  <title>String、StringBuffer、StringBuilder的区别 | weijunzhe's blog</title>
+  <title>int和Integer有什么区别 | weijunzhe's blog</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/22/String、StringBuffer、StringBuilder的区别/">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/24/int和Integer有什么区别/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weijunzhe">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">String、StringBuffer、StringBuilder的区别</h1>
+          <h1 class="post-title" itemprop="name headline">int和Integer有什么区别</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-22T10:08:00+08:00">
-                2019-01-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-24T10:06:08+08:00">
+                2019-01-24
               </time>
             
 
@@ -330,20 +330,22 @@
       
 
       
-        <h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>String 是 Java 语言非常基础和重要的类，提供了构造和管理字符串的各种基本逻辑。它是典型的Immutable类，被声明成为final class，所有属性也都是final的。也由于它的不可变性，类似拼接、裁剪字符串等动作，都会产生新的String对象。由于字符串操作的普遍性，所以相关操作的效率往往对应用性能有明显影响。<br><a id="more"></a><br>StringBuffer 是为了解决上面提到的字符串拼接产生太多中间对象的问题而提供的一个类，我们可以用append 或者 add 方法，把字符串添加到已有序列的末尾或者指定位置。StringBuffer 本质是一个线程安全的可修改字符序列，它保证了线程安全，也随之带来了额外的性能开销，所以除非有线程安全的需要，不然还是推荐使用它的后继者，也就是StringBuilder。</p>
-<p>StringBuilder 是 Java 1.5 中新增的， 在能力上和 StringBuffer 没有本质区别，但是它去掉了线程安全的部分，有效减少了开销，是绝大部分情况下进行字符串拼接的首选。</p>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><ol>
-<li><p>字符串的设计与实现考量<br>String 是 Immutable 类的典型实现，原生的保证了基础线程安全，因为你无法对它内部数据进行任何修改，这种便利甚至体现在拷贝构造函数中，由于不可变，Immutable 对象在拷贝时不需要额外复制数据。</p>
-</li>
-<li><p>字符串缓存<br>如果把常见应用进行堆转存（Dump Heap），然后分析对象组成，会发现平均25%的对象是字符串，并且其中约半数是重复的。如果能避免创建重复字符串，可以有效降低内存消耗和对象创建开销。</p>
-</li>
-<li><p>String自身的演化<br>在Java的字符串历史版本中，它是使用char数组来存储数据的，这样非常直接。但是Java中的char是两个bytes大小，拉丁语系语言的字符，根本就不需要太宽的char，这样无区别的实现就造成了一定的浪费。密度是编程语言平台永恒的话题，因为归根结底绝大部分任务是要来操作数据的。</p>
-</li>
-</ol>
-<p>在Java 6 的时候，Oracle JDK 就提供了压缩字符串的特性，但是这个特性的实现并不是开源的，而是在实践中也暴露出了一些问题，所以在最新的JDK版本中已经将它移除了。</p>
-<p>在 Java 9中，我们引入Compact Strings的设计，对字符串进行了大刀阔斧的改进。将数据存储方式从char数组，改变为一个byte数组加上一个标识编码的所谓coder，并且将相关字符串操作类都进行了修改。另外，所有相关的Intrinsic之类也都进行了重写，以保证没有任何性能损失。</p>
-<p>当然，在极端情况下，字符串也出现了一些能力退化，比如最大字符串的大小。可以思考下，原来char数组的实现，字符串的最大长度就是数组本身的长度限制，但是替换成byte数组，同样数组长度下，存储能力是退化了一倍的！还好这是存在于理论上的极限，还没有发现现实应用受此影响。</p>
-<p>在通用的性能测试和产品实验中，我们能非常明显地看到紧凑字符串带来的优势，<strong>更小的内存占用、更快的 操作速度</strong>。</p>
+        <p>java虽然号称是面向对象的语言，但是原始数据类型仍然是重要的组成元素，所以在面试中，经常考察原始数据类型和包装类等Java语言特性。<br><a id="more"></a><br>int 是我们常说的整形数字，是 Java 的8个原始数据类型（Primitive Types，boolean、byte、short、int、float、double、long）之一。<strong>Java语言虽然号称一切都是对象，但是原始类型是例外</strong>。</p>
+<p>Integer 是 int 对应的包装类，他有一个 int 类型的字段存储数据，并且提供了基本操作，比如数学运算、int和字符串之间转换等。在Java 5 中，引入了自动装箱和自动拆箱功能（boxing/unboxing），Java 可以根据上下文，自动进行转换，极大地简化了相关编程。</p>
+<p>关于 Integer 的值缓存，这涉及 Java 5 中另一个改进。构建 Integer 对象的传统方式是直接调用构造器，直接 new 一个对象。但是根据实践，我们发现大部分数据操作都是集中在有限的、较小的数值范围，因而，在 Java 5 中新增了静态工厂方法 valueOf，在调用他的时候会利用一个缓存机制，带来了明显的性能改进。按照 Javadoc，<strong>这个值默认缓存是 -128 到 127 之间</strong>。</p>
+<h6 id="知识扩展"><a href="#知识扩展" class="headerlink" title="知识扩展"></a>知识扩展</h6><h6 id="理解自动装箱、拆箱"><a href="#理解自动装箱、拆箱" class="headerlink" title="理解自动装箱、拆箱"></a>理解自动装箱、拆箱</h6><p>自动装箱实际上算是一种<strong>语法糖</strong>。什么是语法糖？可以简单理解为 Java 平台为我们自动进行了一些转换，保证不同的写法在运行时等价，他们发生在编译阶段，也就是生成的字节码是一致的。</p>
+<p>像前面提到的整数，javac 替我们自动把装箱转换为 Integer.valueOf()，把拆箱替换为 Integer.intValue()，这似乎也顺道回答了另一个问题，既然调用的是 Integer.valueOf()，自然能够得到缓存的好处啊。</p>
+<p>如何程序化的验证上面的结论呢？</p>
+<p>你可以写一段简单的程序包含下面两句代码，然后反编译一下。当然，这是一种从表现倒推的方法，大多数情况下，我们还是直接参考规范文档会更加可靠，毕竟软件承诺的是遵循规范，而不是保持当前行为。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer integer = 1;</span><br><span class="line">int unboxing = integer ++;</span><br></pre></td></tr></table></figure></p>
+<p>反编译输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1: invokestatic  #2                  // Method</span><br><span class="line">java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">8: invokevirtual #3                  // Method</span><br><span class="line">java/lang/Integer.intValue:()I</span><br></pre></td></tr></table></figure></p>
+<p>这种缓存机制并不是只有 Integer 才有，同样存在于其他的一些包装类，比如：</p>
+<ul>
+<li>Boolean，缓存了 true/false 对应实例，确切说，只会返回两个常量实例 Boolean.TRUE/FALSE。</li>
+<li>Short，同样是缓存了 -128 到 127 之间的数值。</li>
+<li>Byte，数值有限，所以全部都被缓存。</li>
+<li>Character，缓存范围‘\u0000’ 到 ‘\u007F’。<br>自动装箱/自动拆箱似乎很酷，在编程实践中，有什么需要注意的吗？</li>
+</ul>
+<p>原则上，<strong>建议避免无意中的装箱、拆箱行为</strong>，尤其是在性能敏感的场合，创建 10 万个 Java 对象和 10 万个整数的开销可不是一个数量级的，不管是内存使用还是处理速度，光是对象头的空间占用就已经是数量级的差距了。</p>
 <p>以上就是今天的总结。</p>
 
       
@@ -404,8 +406,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/21/强引用、软引用、弱引用、幻象引用有什么区别/" rel="next" title="强引用、软引用、弱引用、幻象引用有什么区别">
-                <i class="fa fa-chevron-left"></i> 强引用、软引用、弱引用、幻象引用有什么区别
+              <a href="/2019/01/23/Java反射机制与动态代理/" rel="next" title="Java反射机制与动态代理">
+                <i class="fa fa-chevron-left"></i> Java反射机制与动态代理
               </a>
             
           </div>
@@ -413,10 +415,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/23/Java反射机制与动态代理/" rel="prev" title="Java反射机制与动态代理">
-                Java反射机制与动态代理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -601,7 +599,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#区别"><span class="nav-number">1.</span> <span class="nav-text">区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展"><span class="nav-number">2.</span> <span class="nav-text">扩展</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#知识扩展"><span class="nav-number">1.</span> <span class="nav-text">知识扩展</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#理解自动装箱、拆箱"><span class="nav-number">2.</span> <span class="nav-text">理解自动装箱、拆箱</span></a></li></ol></div>
             
 
           </div>
