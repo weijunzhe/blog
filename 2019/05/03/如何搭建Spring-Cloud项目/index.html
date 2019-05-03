@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,Spring Boot,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是Spring CloudSpring Cloud是一个分布式的整体解决方案。Spring Cloud 为开发者提供了在分布式系统（配置管理，服务发现，熔断，路由，微代理，控制总线，一次性token，全局琐，leader选举，分布式session，集群状态）中快速构建的工具，使用Spring Cloud的开发者可以快速的启动服务或构建应用、同时能够快速和云平台资源进行对接。">
+<meta name="keywords" content="java,Spring Boot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何搭建Spring Cloud项目">
+<meta property="og:url" content="http://yangweijun.top/2019/05/03/如何搭建Spring-Cloud项目/index.html">
+<meta property="og:site_name" content="weijunzhe&#39;s blog">
+<meta property="og:description" content="什么是Spring CloudSpring Cloud是一个分布式的整体解决方案。Spring Cloud 为开发者提供了在分布式系统（配置管理，服务发现，熔断，路由，微代理，控制总线，一次性token，全局琐，leader选举，分布式session，集群状态）中快速构建的工具，使用Spring Cloud的开发者可以快速的启动服务或构建应用、同时能够快速和云平台资源进行对接。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img-blog.csdn.net/20170726180804893">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAmaven1.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAmaven2.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAmaven3.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E6%94%B9%E6%88%90pom.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAspringboot%E6%A8%A1%E5%9D%971.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%832.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%833.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E5%8F%91%E5%B8%83%E6%9C%8D%E5%8A%A1%E5%90%8E%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83_LI.jpg">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E6%B5%8B%E8%AF%95%E6%9C%8D%E5%8A%A1%E5%8F%91%E5%B8%83%E4%BB%A3%E7%A0%81.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAspringboot%E6%A8%A1%E5%9D%971.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%832.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%833.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9%E8%80%85%E5%90%8E%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9%E8%80%85%E9%A1%B5%E9%9D%A2.png">
+<meta property="og:updated_time" content="2019-05-03T15:24:17.496Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何搭建Spring Cloud项目">
+<meta name="twitter:description" content="什么是Spring CloudSpring Cloud是一个分布式的整体解决方案。Spring Cloud 为开发者提供了在分布式系统（配置管理，服务发现，熔断，路由，微代理，控制总线，一次性token，全局琐，leader选举，分布式session，集群状态）中快速构建的工具，使用Spring Cloud的开发者可以快速的启动服务或构建应用、同时能够快速和云平台资源进行对接。">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20170726180804893">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yangweijun.top/2019/05/03/如何搭建Spring-Cloud项目/">
+
+
+
+
+
+  <title>如何搭建Spring Cloud项目 | weijunzhe's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">weijunzhe's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hello,world</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/05/03/如何搭建Spring-Cloud项目/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weijunzhe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="weijunzhe's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何搭建Spring Cloud项目</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-03T21:04:54+08:00">
+                2019-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="什么是Spring-Cloud"><a href="#什么是Spring-Cloud" class="headerlink" title="什么是Spring Cloud"></a>什么是Spring Cloud</h3><p>Spring Cloud是一个分布式的整体解决方案。Spring Cloud 为开发者提供了在分布式系统（配置管理，服务发现，熔断，路由，微代理，控制总线，一次性token，全局琐，leader选举，分布式session，集群状态）中快速构建的工具，使用Spring Cloud的开发者可以快速的启动服务或构建应用、同时能够快速和云平台资源进行对接。<br><img src="https://img-blog.csdn.net/20170726180804893" alt="spring cloud调用图"><br><a id="more"></a></p>
+<h4 id="SpringCloud分布式开发五大常用组件"><a href="#SpringCloud分布式开发五大常用组件" class="headerlink" title="SpringCloud分布式开发五大常用组件"></a>SpringCloud分布式开发五大常用组件</h4><ul>
+<li>服务发现——Netflix Eureka </li>
+<li>客服端负载均衡——Netflix Ribbon </li>
+<li>断路器——Netflix Hystrix </li>
+<li>服务网关——Netflix Zuul </li>
+<li>分布式配置——Spring Cloud Config</li>
+</ul>
+<p><strong>测试如下</strong>：建立一个pom工程，工程中创建三个Module：eureka-server，eureka-consumer和provider-server。</p>
+<h3 id="建立pom工程"><a href="#建立pom工程" class="headerlink" title="建立pom工程"></a>建立pom工程</h3><ol>
+<li>使用idea的工具栏 file -&gt; new -&gt; project 使用maven 创建pom工程。<br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAmaven1.png" alt="创建maven1"><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAmaven2.png" alt="创建maven2"><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAmaven3.png" alt="创建maven3"></li>
+</ol>
+<ol start="2">
+<li>将项目pom.xml里的packaging标签内容改成pom，使项目变成聚合工程。Spring boot版本最好是<strong>1.5.10.RELEASE</strong>，否则可能会出现不必要的报错。<br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E6%94%B9%E6%88%90pom.png" alt="改成pom工程"></li>
+</ol>
+<h4 id="建立eureka-server注册中心"><a href="#建立eureka-server注册中心" class="headerlink" title="建立eureka-server注册中心"></a>建立eureka-server注册中心</h4><ol>
+<li><p>在pom工程中创建一个Spring boot模块,名称为eureka-server<br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAspringboot%E6%A8%A1%E5%9D%971.png" alt=""><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png" alt=""><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%832.png" alt=""><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%833.png" alt=""></p>
+</li>
+<li><p>继承父类的pom，eureka-server的pom文件修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;parent&gt;</span><br><span class="line">        &lt;groupId&gt;com.weijunzhe&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;springcloud&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">    &lt;/parent&gt;</span><br><span class="line">    &lt;groupId&gt;com.weijunzhe&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;eureka-server&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">    &lt;name&gt;eureka-server&lt;/name&gt;</span><br><span class="line">    &lt;packaging&gt;jar&lt;/packaging&gt;</span><br><span class="line">    &lt;description&gt;Spring cloud 注册中心&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">    &lt;properties&gt;</span><br><span class="line">        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</span><br><span class="line">        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</span><br><span class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">        &lt;spring-cloud.version&gt;Edgware.SR2&lt;/spring-cloud.version&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">    &lt;dependencyManagement&gt;</span><br><span class="line">        &lt;dependencies&gt;</span><br><span class="line">            &lt;dependency&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;$&#123;spring-cloud.version&#125;&lt;/version&gt;</span><br><span class="line">                &lt;type&gt;pom&lt;/type&gt;</span><br><span class="line">                &lt;scope&gt;import&lt;/scope&gt;</span><br><span class="line">            &lt;/dependency&gt;</span><br><span class="line">        &lt;/dependencies&gt;</span><br><span class="line">    &lt;/dependencyManagement&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line">    &lt;repositories&gt;</span><br><span class="line">        &lt;repository&gt;</span><br><span class="line">            &lt;id&gt;spring-milestones&lt;/id&gt;</span><br><span class="line">            &lt;name&gt;Spring Milestones&lt;/name&gt;</span><br><span class="line">            &lt;url&gt;https://repo.spring.io/milestone&lt;/url&gt;</span><br><span class="line">            &lt;snapshots&gt;</span><br><span class="line">                &lt;enabled&gt;false&lt;/enabled&gt;</span><br><span class="line">            &lt;/snapshots&gt;</span><br><span class="line">        &lt;/repository&gt;</span><br><span class="line">    &lt;/repositories&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>application.yml修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8761</span><br><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: eureka-server     # eureka实例的主机名</span><br><span class="line">eureka:</span><br><span class="line">  instance:</span><br><span class="line">    prefer-ip-address: true</span><br><span class="line">  client:</span><br><span class="line">    fetch-registry: false   #不把自己注册到eureka上</span><br><span class="line">    register-with-eureka: false #不从eureka上来获取服务的注册信息--不检索服务</span><br><span class="line">  server:</span><br><span class="line">    wait-time-in-ms-when-sync-empty: 0</span><br><span class="line">security:</span><br><span class="line">  basic:</span><br><span class="line">    enabled: true   # 启用用户名和密码保护服务</span><br><span class="line">  user:     # 注册服务使用的用户名和密码</span><br><span class="line">    name: admin</span><br><span class="line">    password: admin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动类加上EnableEurekaServer注解：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">package com.weijunzhe;</span><br><span class="line"></span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line">import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;</span><br><span class="line"></span><br><span class="line">@EnableEurekaServer</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class EurekaServerApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(EurekaServerApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动注册中心项目，浏览器访问<a href="http://localhost:8761/：" target="_blank" rel="noopener">http://localhost:8761/：</a><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png" alt=""></p>
+</li>
+</ol>
+<p>此时注册中心中还没有任何服务实例！</p>
+<h4 id="创建服务提供者并进行注册"><a href="#创建服务提供者并进行注册" class="headerlink" title="创建服务提供者并进行注册"></a>创建服务提供者并进行注册</h4><ol>
+<li>在pom工程中创建一个Springboot模块,名称为produce-server</li>
+<li><p>继承父类的pom，produce-server的pom文件修改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;parent&gt;</span><br><span class="line">        &lt;groupId&gt;com.weijunzhe&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;springcloud&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">    &lt;/parent&gt;</span><br><span class="line">    &lt;groupId&gt;com.weijunzhe&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;produce-server&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">    &lt;name&gt;produce-server&lt;/name&gt;</span><br><span class="line">    &lt;description&gt;Springcloud服务发布端&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">    &lt;properties&gt;</span><br><span class="line">        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</span><br><span class="line">        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</span><br><span class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">        &lt;spring-cloud.version&gt;Edgware.SR2&lt;/spring-cloud.version&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</span><br><span class="line">            &lt;!--这里表明为客户端--&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencyManagement&gt;</span><br><span class="line">        &lt;dependencies&gt;</span><br><span class="line">            &lt;dependency&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;$&#123;spring-cloud.version&#125;&lt;/version&gt;</span><br><span class="line">                &lt;type&gt;pom&lt;/type&gt;</span><br><span class="line">                &lt;scope&gt;import&lt;/scope&gt;</span><br><span class="line">            &lt;/dependency&gt;</span><br><span class="line">        &lt;/dependencies&gt;</span><br><span class="line">    &lt;/dependencyManagement&gt;</span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>application.yml修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8001</span><br><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: produce-server</span><br><span class="line">eureka:</span><br><span class="line">  client:</span><br><span class="line">    registerWithEureka: true</span><br><span class="line">    fetchRegistry: true</span><br><span class="line">    serviceUrl:</span><br><span class="line">      defaultZone: http://admin:admin@localhost:8761/eureka/</span><br><span class="line">  instance:</span><br><span class="line">    prefer-ip-address: true # 注册服务的时候使用服务的ip地址</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>4.主程序类如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">package com.weijunzhe;</span><br><span class="line"></span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line">import org.springframework.cloud.client.discovery.EnableDiscoveryClient;</span><br><span class="line"></span><br><span class="line">@SpringBootApplication</span><br><span class="line">@EnableDiscoveryClient</span><br><span class="line">public class ProduceServerApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(ProduceServerApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol start="5">
+<li>发布服务如下：</li>
+</ol>
+<ul>
+<li><p>service如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">package com.weijunzhe.test.service.impl;</span><br><span class="line"></span><br><span class="line">import com.weijunzhe.test.service.TestService;</span><br><span class="line">import org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line">@Service</span><br><span class="line">public class TestServiceImpl implements TestService &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String test(String username) &#123;</span><br><span class="line">        System.out.println(&quot;欢迎您，&quot; + username);</span><br><span class="line">        return &quot;欢迎您，&quot; + username;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>controller如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package com.weijunzhe.test.controller;</span><br><span class="line"></span><br><span class="line">import com.weijunzhe.test.service.TestService;</span><br><span class="line">import org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">import javax.annotation.Resource;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class TestController &#123;</span><br><span class="line"></span><br><span class="line">    @Resource</span><br><span class="line">    TestService testService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/test&quot;)</span><br><span class="line">    public String test(String username)&#123;</span><br><span class="line">        return testService.test(username);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol start="6">
+<li>启动服务提供者，然后查看浏览器注册中心页面：<br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E5%8F%91%E5%B8%83%E6%9C%8D%E5%8A%A1%E5%90%8E%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83_LI.jpg" alt=""></li>
+</ol>
+<p>此时注册中心中就有了服务提供者的一个实例！</p>
+<p>浏览器测试服务提供者如下：<br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E6%B5%8B%E8%AF%95%E6%9C%8D%E5%8A%A1%E5%8F%91%E5%B8%83%E4%BB%A3%E7%A0%81.png" alt=""></p>
+<h4 id="创建服务消费者并注册和发现服务"><a href="#创建服务消费者并注册和发现服务" class="headerlink" title="创建服务消费者并注册和发现服务"></a>创建服务消费者并注册和发现服务</h4><ol>
+<li><p>在pom工程中创建一个Springboot模块,名称为eureka-server<br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BAspringboot%E6%A8%A1%E5%9D%971.png" alt=""><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png" alt=""><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%832.png" alt=""><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%833.png" alt=""></p>
+</li>
+<li><p>继承父类的pom，eureka-server的pom文件修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;parent&gt;</span><br><span class="line">        &lt;groupId&gt;com.weijunzhe&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;springcloud&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">    &lt;/parent&gt;</span><br><span class="line">    &lt;groupId&gt;com.weijunzhe&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;eureka-server&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">    &lt;name&gt;eureka-server&lt;/name&gt;</span><br><span class="line">    &lt;packaging&gt;jar&lt;/packaging&gt;</span><br><span class="line">    &lt;description&gt;Spring cloud 注册中心&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">    &lt;properties&gt;</span><br><span class="line">        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</span><br><span class="line">        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</span><br><span class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">        &lt;spring-cloud.version&gt;Edgware.SR2&lt;/spring-cloud.version&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">    &lt;dependencyManagement&gt;</span><br><span class="line">        &lt;dependencies&gt;</span><br><span class="line">            &lt;dependency&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;$&#123;spring-cloud.version&#125;&lt;/version&gt;</span><br><span class="line">                &lt;type&gt;pom&lt;/type&gt;</span><br><span class="line">                &lt;scope&gt;import&lt;/scope&gt;</span><br><span class="line">            &lt;/dependency&gt;</span><br><span class="line">        &lt;/dependencies&gt;</span><br><span class="line">    &lt;/dependencyManagement&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line">    &lt;repositories&gt;</span><br><span class="line">        &lt;repository&gt;</span><br><span class="line">            &lt;id&gt;spring-milestones&lt;/id&gt;</span><br><span class="line">            &lt;name&gt;Spring Milestones&lt;/name&gt;</span><br><span class="line">            &lt;url&gt;https://repo.spring.io/milestone&lt;/url&gt;</span><br><span class="line">            &lt;snapshots&gt;</span><br><span class="line">                &lt;enabled&gt;false&lt;/enabled&gt;</span><br><span class="line">            &lt;/snapshots&gt;</span><br><span class="line">        &lt;/repository&gt;</span><br><span class="line">    &lt;/repositories&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>application.yml修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8761</span><br><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: eureka-server     # eureka实例的主机名</span><br><span class="line">eureka:</span><br><span class="line">  instance:</span><br><span class="line">    prefer-ip-address: true</span><br><span class="line">  client:</span><br><span class="line">    fetch-registry: false   #不把自己注册到eureka上</span><br><span class="line">    register-with-eureka: false #不从eureka上来获取服务的注册信息--不检索服务</span><br><span class="line">  server:</span><br><span class="line">    wait-time-in-ms-when-sync-empty: 0</span><br><span class="line">security:</span><br><span class="line">  basic:</span><br><span class="line">    enabled: true   # 启用用户名和密码保护服务</span><br><span class="line">  user:     # 注册服务使用的用户名和密码</span><br><span class="line">    name: admin</span><br><span class="line">    password: admin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动类加上EnableEurekaServer注解：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">package com.weijunzhe;</span><br><span class="line"></span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line">import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;</span><br><span class="line"></span><br><span class="line">@EnableEurekaServer</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class EurekaServerApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(EurekaServerApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动注册中心项目，浏览器访问<a href="http://localhost:8761/：" target="_blank" rel="noopener">http://localhost:8761/：</a><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png" alt=""></p>
+</li>
+</ol>
+<p>此时注册中心中还没有任何服务实例！</p>
+<h4 id="创建服务提供者并进行注册-1"><a href="#创建服务提供者并进行注册-1" class="headerlink" title="创建服务提供者并进行注册"></a>创建服务提供者并进行注册</h4><ol>
+<li>在pom工程中创建一个Springboot模块,名称为eureka-consumer</li>
+<li><p>继承父类的pom，eureka-consumer的pom文件修改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;parent&gt;</span><br><span class="line">        &lt;groupId&gt;com.weijunzhe&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;springcloud&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">    &lt;/parent&gt;</span><br><span class="line">    &lt;groupId&gt;com.weijunzhe&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;eureka-consumer&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">    &lt;name&gt;eureka-consumer&lt;/name&gt;</span><br><span class="line">    &lt;description&gt;Spring Cloud 消费端&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">    &lt;properties&gt;</span><br><span class="line">        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</span><br><span class="line">        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</span><br><span class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">        &lt;spring-cloud.version&gt;Edgware.SR2&lt;/spring-cloud.version&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">    &lt;dependencyManagement&gt;</span><br><span class="line">        &lt;dependencies&gt;</span><br><span class="line">            &lt;dependency&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;$&#123;spring-cloud.version&#125;&lt;/version&gt;</span><br><span class="line">                &lt;type&gt;pom&lt;/type&gt;</span><br><span class="line">                &lt;scope&gt;import&lt;/scope&gt;</span><br><span class="line">            &lt;/dependency&gt;</span><br><span class="line">        &lt;/dependencies&gt;</span><br><span class="line">    &lt;/dependencyManagement&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>application.yml修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: consumer-user</span><br><span class="line">server:</span><br><span class="line">  port: 8200</span><br><span class="line"></span><br><span class="line">eureka:</span><br><span class="line">  instance:</span><br><span class="line">    prefer-ip-address: true # 注册服务的时候使用服务的ip地址</span><br><span class="line">  client:</span><br><span class="line">    service-url:</span><br><span class="line">      defaultZone: http://admin:admin@localhost:8761/eureka/</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>4.主程序类如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">package com.weijunzhe;</span><br><span class="line"></span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line">import org.springframework.cloud.client.discovery.EnableDiscoveryClient;</span><br><span class="line">import org.springframework.cloud.client.loadbalancer.LoadBalanced;</span><br><span class="line">import org.springframework.context.annotation.Bean;</span><br><span class="line">import org.springframework.web.client.RestTemplate;</span><br><span class="line"></span><br><span class="line">@SpringBootApplication</span><br><span class="line">@EnableDiscoveryClient //开启发现服务功能</span><br><span class="line">public class EurekaConsumerApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(EurekaConsumerApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @LoadBalanced //开启负载均衡机制</span><br><span class="line">    @Bean</span><br><span class="line">    public RestTemplate restTemplate()&#123;</span><br><span class="line">        return new RestTemplate();</span><br><span class="line">        // 用来发送http请求</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol start="5">
+<li>发布服务如下：</li>
+</ol>
+<ul>
+<li>controller如下：<br>这里需要注意手动往容器中注册了RestTemplate，其提供了多种便捷访问远程Http服务的方法，是一种简单便捷的访问restful服务模板类，是Spring提供的用于访问REST服务的客户端模板工具类。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">package com.weijunzhe.test.controller;</span><br><span class="line"></span><br><span class="line">import org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line">import org.springframework.web.client.RestTemplate;</span><br><span class="line"></span><br><span class="line">import javax.annotation.Resource;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class TestController &#123;</span><br><span class="line"></span><br><span class="line">    @Resource</span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/test&quot;)</span><br><span class="line">    public String test(String username)&#123;</span><br><span class="line">        String msg = restTemplate.getForObject(&quot;http://produce-server/test?username=&quot; + username, String.class);</span><br><span class="line">        return msg;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol start="6">
+<li>将服务消费者项目启动，查看浏览器注册中心：<br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9%E8%80%85%E5%90%8E%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83.png" alt=""></li>
+</ol>
+<p>访问服务消费者的方法(<a href="http://localhost:8200/test?username=admin2)：" target="_blank" rel="noopener">http://localhost:8200/test?username=admin2)：</a><br><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/05/03/%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9%E8%80%85%E9%A1%B5%E9%9D%A2.png" alt=""></p>
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><p><a href="https://blog.csdn.net/j080624/article/details/81004207" target="_blank" rel="noopener">https://blog.csdn.net/j080624/article/details/81004207</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="weijunzhe 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="weijunzhe 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/Spring-Boot/" rel="tag"># Spring Boot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/29/Map如何实现线程安全/" rel="next" title="Map如何实现线程安全">
+                <i class="fa fa-chevron-left"></i> Map如何实现线程安全
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">weijunzhe</p>
+              <p class="site-description motion-element" itemprop="description">weijunzhe</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="/wechat" target="_blank" title="Wechat">
+                      
+                        <i class="fa fa-fw fa-weixin"></i>Wechat</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/weijunzhe" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1104774305@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-mobile"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/qq_37753580" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-bell"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=4164331&auto=1&height=66"></iframe>
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Spring-Cloud"><span class="nav-number">1.</span> <span class="nav-text">什么是Spring Cloud</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringCloud分布式开发五大常用组件"><span class="nav-number">1.1.</span> <span class="nav-text">SpringCloud分布式开发五大常用组件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建立pom工程"><span class="nav-number">2.</span> <span class="nav-text">建立pom工程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立eureka-server注册中心"><span class="nav-number">2.1.</span> <span class="nav-text">建立eureka-server注册中心</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建服务提供者并进行注册"><span class="nav-number">2.2.</span> <span class="nav-text">创建服务提供者并进行注册</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建服务消费者并注册和发现服务"><span class="nav-number">2.3.</span> <span class="nav-text">创建服务消费者并注册和发现服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建服务提供者并进行注册-1"><span class="nav-number">2.4.</span> <span class="nav-text">创建服务提供者并进行注册</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文章"><span class="nav-number">2.5.</span> <span class="nav-text">参考文章</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 
+<a href="http://www.miitbeian.gov.cn/">京ICP备18031051号-1</a> 
+<span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weijunzhe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
