@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,">
+  <meta name="keywords" content="Storm,">
 
 
 
@@ -79,18 +79,21 @@
 
 
 
-<meta name="description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finalize 是">
-<meta name="keywords" content="java">
+<meta name="description" content="环境 版本: Storm 1.2.2 java: jdk 1.7 系统：centos7 zookeeper-3.4.14">
+<meta name="keywords" content="Storm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="final、finally、finalize的区别">
-<meta property="og:url" content="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/index.html">
+<meta property="og:title" content="Storm集群搭建">
+<meta property="og:url" content="http://yangweijun.top/2019/06/28/Storm集群搭建/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finalize 是">
+<meta property="og:description" content="环境 版本: Storm 1.2.2 java: jdk 1.7 系统：centos7 zookeeper-3.4.14">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-21T02:15:22.401Z">
+<meta property="og:image" content="c:/Users/Shinelon/Desktop/FireShot%20Capture%20037%20-%20Storm%20UI%20-%20http___192.168.23.139_8088_index.html.png">
+<meta property="og:image" content="https://img-blog.csdn.net/20161013225512536">
+<meta property="og:updated_time" content="2019-06-28T01:37:33.599Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="final、finally、finalize的区别">
-<meta name="twitter:description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finalize 是">
+<meta name="twitter:title" content="Storm集群搭建">
+<meta name="twitter:description" content="环境 版本: Storm 1.2.2 java: jdk 1.7 系统：centos7 zookeeper-3.4.14">
+<meta name="twitter:image" content="c:/Users/Shinelon/Desktop/FireShot%20Capture%20037%20-%20Storm%20UI%20-%20http___192.168.23.139_8088_index.html.png">
 
 
 
@@ -120,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/">
+  <link rel="canonical" href="http://yangweijun.top/2019/06/28/Storm集群搭建/">
 
 
 
 
 
-  <title>final、finally、finalize的区别 | weijunzhe's blog</title>
+  <title>Storm集群搭建 | weijunzhe's blog</title>
   
 
 
@@ -263,7 +266,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/06/28/Storm集群搭建/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weijunzhe">
@@ -280,7 +283,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">final、finally、finalize的区别</h1>
+          <h1 class="post-title" itemprop="name headline">Storm集群搭建</h1>
         
 
         <div class="post-meta">
@@ -292,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T10:40:09+08:00">
-                2019-01-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-28T09:36:51+08:00">
+                2019-06-28
               </time>
             
 
@@ -330,32 +333,66 @@
       
 
       
-        <p><strong>final</strong> 可以用来修饰类、方法、变量，分别有着不同的意义，<strong>final</strong> 修饰的class代表不能被继承、<strong>final</strong> 修饰的方法表示不能被重写，<strong>final</strong> 修饰的变量表示不能被修改。</p>
-<p><strong>finally</strong> 则是java保证重点代码一定被执行的一种机制。我们可以使用 <strong>try-finally</strong> 或者 <strong>try-catch-finally</strong> 来进行类似关闭JDBC连接、保证unlock锁等动作。</p>
-<p><strong>finalize</strong> 是基础类<strong>java.lang.Object</strong>的一个方法，它的设计目的是保证对象在垃圾收集之前完成特定资源的回收。<strong>finalize</strong>机制已经不被推荐使用了，并且在<strong>JDK 9</strong>中被标记为<strong>deprecated</strong>。</p>
-<a id="more"></a>
-<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><h5 id="final"><a href="#final" class="headerlink" title="final"></a>final</h5><ol>
-<li>我们可以将方法或者类声明成 <strong>final</strong>,这样就可以明确告诉别人，这些行为是不允许修改的。在<strong>java.lang</strong>包下面的很多类，相当一部分已经被声明成<strong>final class</strong>，在第三方类库的一些基础类中同样如此，这样能有效避免<strong>API</strong>的使用者更改一些基础功能，在某种意义上讲，这是保证平台安全的必要手段。</li>
-<li>使用final修饰参数或者变量，也可以清楚地避免意外赋值导致的编程错误，甚至，有些人明确推荐将所有方法参数、本地变量、成员变量声明成<strong>final</strong>。</li>
-<li><strong>final</strong>变量产生了某种程度的不可变（immutable）的效果，所以，可以用于保护只读数据，尤其是在并发编程中，因为明确地不能再赋值<strong>final</strong>变量，有利于减少额外的同步开销，也可以省去一些防御性拷贝的必要。</li>
-</ol>
-<blockquote>
-<p>final 也许会有性能上的好处，但是从开发实践的角度，除非有特别的考虑，不然最好不要指望这种小技巧带来所谓的性能好处，程序最好是体现它的语义目的。</p>
+        <h5 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h5><blockquote>
+<p>版本: Storm 1.2.2</p>
+<p>java: jdk 1.7</p>
+<p>系统：centos7</p>
+<p>zookeeper-3.4.14<br><a id="more"></a><br>分别在三台机器上部署</p>
 </blockquote>
-<h5 id="finally"><a href="#finally" class="headerlink" title="finally"></a>finally</h5><p>对于<strong>finally</strong>，明确知道怎么使用就足够了。需要关闭的连接等资源，更推荐使用<strong>Java 7</strong>中添加的<strong>try-with-resources</strong>语句，因为通常<strong>Java</strong>平台能够更好地处理异常情况，编码量也要少很多，何乐而不为呢？</p>
-<p>另外，有一些偏门的<strong>finally</strong>问题也会被问到，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  // do something</span><br><span class="line">  System.exit(1);</span><br><span class="line">&#125; finally&#123;</span><br><span class="line">  System.out.println(“Print from finally”);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>上面的<strong>finally</strong>里面的代码是不会被执行的，这是一个特例。</p>
+<p>server0 192.168.23.139(Master)</p>
+<p>server1 192.168.23.140(Supervisor)</p>
+<p>server2 192.168.23.141(Supervisor)</p>
 </blockquote>
-<h5 id="finalize"><a href="#finalize" class="headerlink" title="finalize"></a>finalize</h5><p><strong>finalize</strong> 的执行时和垃圾收集关联在一起的，一旦实现了非空的 <strong>finalize</strong> 方法，就会导致相应的对象回收呈现数量级上的变慢，有人专门做过 <strong>benchmark</strong>，大概是 <strong>40-50</strong> 倍的下降。<br>因为，<strong>finalize</strong> 被设计成在对象<strong>被垃圾收集前</strong>调用，这意味着实现了 <strong>finalize</strong> 方法的对象是个“特殊公民”，JVM 要对它进行额外处理。<strong>finalize</strong> 本质上成为了快速回收的阻碍者，可能导致你的对象经过多个垃圾收集周期才能被回收。</p>
-<h5 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h5><ol>
-<li><strong>final</strong>不是 immutable！<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">final List&lt;String&gt; strList = new ArrayList&lt;&gt;();</span><br><span class="line">strList.add(&quot;Hello&quot;);</span><br><span class="line">strList.add(&quot;world&quot;);  </span><br><span class="line">List&lt;String&gt; unmodifiableStrList = List.of(&quot;hello&quot;, &quot;world&quot;);</span><br><span class="line">unmodifiableStrList.add(&quot;again&quot;);</span><br></pre></td></tr></table></figure>
+<p>安装Storm之前，需要先安装zookeeper,请看我之前的博客<strong>Zookeeper集群搭建</strong></p>
+<h5 id="下载路径"><a href="#下载路径" class="headerlink" title="下载路径"></a>下载路径</h5><p><a href="http://mirror.ox.ac.uk/sites/rsync.apache.org/storm/apache-storm-1.2.2/apache-storm-1.2.2.tar.gz" target="_blank" rel="noopener">apache-storm-1.2.2.tar.gz</a></p>
+<h5 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h5><p>将Storm解压到指定目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf apache-storm-1.2.2.tar.gz -C /usr/local</span><br></pre></td></tr></table></figure>
+<h5 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h5><p>修改conf目录中的storm.yaml文件：    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">storm.local.dir: &quot;/usr/local/apache-storm-1.2.2/localdir&quot;</span><br><span class="line">storm.zookeeper.port: 2181</span><br><span class="line">storm.zookeeper.servers:</span><br><span class="line">      - &quot;server0&quot;</span><br><span class="line">      - &quot;server1&quot;</span><br><span class="line">      - &quot;server2&quot;</span><br><span class="line">nimbus.seeds: [&quot;server0&quot;]</span><br><span class="line">ui.host: 0.0.0.0</span><br><span class="line">ui.port: 8088</span><br><span class="line">supervisor.slots.ports:</span><br><span class="line">      - 6700</span><br><span class="line">      - 6701</span><br><span class="line">      - 6702</span><br><span class="line">      - 6703</span><br></pre></td></tr></table></figure>
+<p>在设置参数时，不要使用制表符代替空格。</p>
+<h5 id="新建目录"><a href="#新建目录" class="headerlink" title="新建目录"></a>新建目录</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /usr/local/apache-storm-1.2.2/localdir</span><br></pre></td></tr></table></figure>
+<h5 id="分发文件"><a href="#分发文件" class="headerlink" title="分发文件"></a>分发文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r apache-storm-1.2.2 root@server1:/usr/local</span><br><span class="line">scp -r apache-storm-1.2.2 root@server2:/usr/local</span><br></pre></td></tr></table></figure>
+<h5 id="启动Storm"><a href="#启动Storm" class="headerlink" title="启动Storm"></a>启动Storm</h5><p>先启动Zookeeper</p>
+<ul>
+<li><p>在server0（Master）上启动nimbus进程</p>
+<p>在Storm的bin目录下执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./storm nimbus &amp;</span><br></pre></td></tr></table></figure>
 </li>
-</ol>
-<blockquote>
-<p><strong>final</strong> 只能约束strList这个引用不可被赋值，但是strList 对象行为不被 <strong>final</strong> 影响，添加元素等操作是完全正常的。如果我们真的希望对象本身是不可变的，那么需要相应的类支持不可变的行为。在上面的这个例子中，<a href="http://openjdk.java.net/jeps/269" target="_blank" rel="noopener">List.of方法</a>创建的本身就是不可变的 List，最后那句 <strong>add</strong> 是会在运行时抛出异常的。</p>
+<li><p>在server0（Master）上启动UI进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./storm ui &amp;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在所有的supervisor上启动supervisor进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./storm supervisor &amp;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="启动web登录查看"><a href="#启动web登录查看" class="headerlink" title="启动web登录查看"></a>启动web登录查看</h5><blockquote>
+<p><a href="http://192.168.23.139:8088" target="_blank" rel="noopener">http://192.168.23.139:8088</a></p>
 </blockquote>
-<p>以上就是今天的总结。</p>
+<p><img src="C:\Users\Shinelon\Desktop\FireShot Capture 037 - Storm UI - http___192.168.23.139_8088_index.html.png" alt="图片"></p>
+<p>注意：启动时加载很慢，请耐心等待。如果没有启动成功，请查看日志。</p>
+<h5 id="可能遇到的问题"><a href="#可能遇到的问题" class="headerlink" title="可能遇到的问题"></a>可能遇到的问题</h5><ol>
+<li>web不能正常登录</li>
+</ol>
+<p>如果登录web的时候，一直显示loading summary，看不到任何明确的信息。先查看logs目录下的日志，一般是显示超时之类的。这应该是某个进程没有启动成功。对集群中的每个节点使用jps命令查看，看是否有显示config_value，config_value是没有启动成功，对该节点重新启动（不是重启主机，是重启sotrm相关进程）。</p>
+<p>如果登录web的时候，网页进不去，看不到内容（连loading summary都看不到），一直在链接，也没有提示超时之类的，换浏览器也不行，对所有节点全部重启（不是重启主机，是重启sotrm相关进程）。</p>
+<p>如果kill或者kill -9都杀不掉某个进程，我暂时没有找到解决方法，直接重启主机。</p>
+<p>如果登录进去可以看到nimbus或者supervisor等信息，某些信息看不到（一直显示loading summary）。可以换个浏览器试试，用谷歌可以正常显示，用的360就不行，而且360每次都显示loading summary。</p>
+<ol start="2">
+<li>nimbus或supervisor不能启动</li>
+</ol>
+<p>虽然执行了启动命令但是在命令执行完后进程又退出了。首先查看日志。如果是nimbus不能启动，查看nimbus.log。</p>
+<p>一般会有这样的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2019-06-26 10:02:30.982 o.a.s.s.o.a.z.ClientCnxn main-SendThread(server0:2181) [INFO] Socket connection established to Desktop/192.168.23.139:2181, initiating session</span><br><span class="line">2019-06-26 10:02:30.986 o.a.s.s.o.a.z.ClientCnxn main-SendThread(server0:2181) [INFO] Unable to read additional data from server sessionid 0x0, likely server has closed socket, closing socket connection and attempting reconnect</span><br><span class="line"></span><br><span class="line">2019-06-26 10:02:31.311 o.a.s.s.o.a.z.ClientCnxn main-SendThread(server0:2181) [INFO] Opening socket connection to server Server1/192.168.23.139:2181. Will not attempt to authenticate using SASL (unknown error)</span><br></pre></td></tr></table></figure>
+<p>这个是zkServer挂掉了。虽然执行jps可以看到QuorumPeerMain还在，但是实际上zkServer已经挂了。</p>
+<p>这个是zkServer存活数只有一半（或小于）配置数引起的。比如zookeeper部署了4台，但是只起了2台，默认zkServer状态就是挂掉了。当再起一台zkServer，即存活数达到3台，超过1半了，就可以查看状态了。也就是说zkServer集群已经运行起来了。</p>
+<p>前面的问题也就解释通了，虽然可以看到zkServer进程，但是因为存活数不足，默认zkServer没有运行起来，所以也就无法启动nimbus或者supervisor了。</p>
+<p> <a href="https://blog.csdn.net/zz657114506/article/details/54429965" target="_blank" rel="noopener">storm集群启动停止脚本</a></p>
+<p>其他参考：</p>
+<p>转载自：<a href="https://blog.csdn.net/qq_15581405/article/details/52811104" target="_blank" rel="noopener">关于storm nimbus &gt; /dev/null 2&gt;&amp;1</a></p>
+<p><img src="https://img-blog.csdn.net/20161013225512536" alt=""></p>
+<p>如图所示：<br>bin/storm nimbus会有两个输出，一个标准输出，一个错误输出 </p>
+<p>2&gt;&amp;1的作用是将 2即错误输出 的内容重定向到&amp;1即标准输出中，然后&gt;/dev/null是将两者的结果输入到/dev/null中，相当于抛弃掉。至于最后一个&amp;，因为storm会一直运行，不会自动停掉，页面上就会不停的有内容。&amp;的作用就是将storm拿到后台执行。   </p>
 
       
     </div>
@@ -402,7 +439,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/Storm/" rel="tag"># Storm</a>
           
         </div>
       
@@ -415,8 +452,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/17/Throwable、Error、Exception的区别/" rel="next" title="Throwable、Error、Exception的区别">
-                <i class="fa fa-chevron-left"></i> Throwable、Error、Exception的区别
+              <a href="/2019/06/28/Kafka集群搭建/" rel="next" title="Kafka集群搭建">
+                <i class="fa fa-chevron-left"></i> Kafka集群搭建
               </a>
             
           </div>
@@ -424,10 +461,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/21/强引用、软引用、弱引用、幻象引用有什么区别/" rel="prev" title="强引用、软引用、弱引用、幻象引用有什么区别">
-                强引用、软引用、弱引用、幻象引用有什么区别 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -621,7 +654,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#适用场景"><span class="nav-number">1.</span> <span class="nav-text">适用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#final"><span class="nav-number">1.1.</span> <span class="nav-text">final</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#finally"><span class="nav-number">1.2.</span> <span class="nav-text">finally</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#finalize"><span class="nav-number">1.3.</span> <span class="nav-text">finalize</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#拓展"><span class="nav-number">1.4.</span> <span class="nav-text">拓展</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载路径"><span class="nav-number">2.</span> <span class="nav-text">下载路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解压"><span class="nav-number">3.</span> <span class="nav-text">解压</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#修改配置文件"><span class="nav-number">4.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#新建目录"><span class="nav-number">5.</span> <span class="nav-text">新建目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分发文件"><span class="nav-number">6.</span> <span class="nav-text">分发文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动Storm"><span class="nav-number">7.</span> <span class="nav-text">启动Storm</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动web登录查看"><span class="nav-number">8.</span> <span class="nav-text">启动web登录查看</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#可能遇到的问题"><span class="nav-number">9.</span> <span class="nav-text">可能遇到的问题</span></a></li></ol></div>
             
 
           </div>

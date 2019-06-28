@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,">
+  <meta name="keywords" content="zookeeper,">
 
 
 
@@ -79,18 +79,21 @@
 
 
 
-<meta name="description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finalize 是">
-<meta name="keywords" content="java">
+<meta name="description" content="搭建环境 操作系统：Centos7 java: jdk 1.7+ 版本：3.4.14">
+<meta name="keywords" content="zookeeper">
 <meta property="og:type" content="article">
-<meta property="og:title" content="final、finally、finalize的区别">
-<meta property="og:url" content="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/index.html">
+<meta property="og:title" content="Zookeeper集群搭建">
+<meta property="og:url" content="http://yangweijun.top/2019/06/28/Zookeeper集群搭建/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finalize 是">
+<meta property="og:description" content="搭建环境 操作系统：Centos7 java: jdk 1.7+ 版本：3.4.14">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-21T02:15:22.401Z">
+<meta property="og:image" content="c:/Users/Shinelon/AppData/Roaming/Typora/typora-user-images/1561522479973.png">
+<meta property="og:image" content="c:/Users/Shinelon/AppData/Roaming/Typora/typora-user-images/1561522787591.png">
+<meta property="og:updated_time" content="2019-06-28T01:34:19.478Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="final、finally、finalize的区别">
-<meta name="twitter:description" content="final 可以用来修饰类、方法、变量，分别有着不同的意义，final 修饰的class代表不能被继承、final 修饰的方法表示不能被重写，final 修饰的变量表示不能被修改。 finally 则是java保证重点代码一定被执行的一种机制。我们可以使用 try-finally 或者 try-catch-finally 来进行类似关闭JDBC连接、保证unlock锁等动作。 finalize 是">
+<meta name="twitter:title" content="Zookeeper集群搭建">
+<meta name="twitter:description" content="搭建环境 操作系统：Centos7 java: jdk 1.7+ 版本：3.4.14">
+<meta name="twitter:image" content="c:/Users/Shinelon/AppData/Roaming/Typora/typora-user-images/1561522479973.png">
 
 
 
@@ -120,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/">
+  <link rel="canonical" href="http://yangweijun.top/2019/06/28/Zookeeper集群搭建/">
 
 
 
 
 
-  <title>final、finally、finalize的区别 | weijunzhe's blog</title>
+  <title>Zookeeper集群搭建 | weijunzhe's blog</title>
   
 
 
@@ -263,7 +266,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/18/final、finally、finalize的区别/">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/06/28/Zookeeper集群搭建/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weijunzhe">
@@ -280,7 +283,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">final、finally、finalize的区别</h1>
+          <h1 class="post-title" itemprop="name headline">Zookeeper集群搭建</h1>
         
 
         <div class="post-meta">
@@ -292,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T10:40:09+08:00">
-                2019-01-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-28T09:32:29+08:00">
+                2019-06-28
               </time>
             
 
@@ -330,32 +333,55 @@
       
 
       
-        <p><strong>final</strong> 可以用来修饰类、方法、变量，分别有着不同的意义，<strong>final</strong> 修饰的class代表不能被继承、<strong>final</strong> 修饰的方法表示不能被重写，<strong>final</strong> 修饰的变量表示不能被修改。</p>
-<p><strong>finally</strong> 则是java保证重点代码一定被执行的一种机制。我们可以使用 <strong>try-finally</strong> 或者 <strong>try-catch-finally</strong> 来进行类似关闭JDBC连接、保证unlock锁等动作。</p>
-<p><strong>finalize</strong> 是基础类<strong>java.lang.Object</strong>的一个方法，它的设计目的是保证对象在垃圾收集之前完成特定资源的回收。<strong>finalize</strong>机制已经不被推荐使用了，并且在<strong>JDK 9</strong>中被标记为<strong>deprecated</strong>。</p>
+        <h5 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h5><blockquote>
+<p>操作系统：Centos7</p>
+<p>java: jdk 1.7+</p>
+<p>版本：3.4.14</p>
+</blockquote>
 <a id="more"></a>
-<h4 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h4><h5 id="final"><a href="#final" class="headerlink" title="final"></a>final</h5><ol>
-<li>我们可以将方法或者类声明成 <strong>final</strong>,这样就可以明确告诉别人，这些行为是不允许修改的。在<strong>java.lang</strong>包下面的很多类，相当一部分已经被声明成<strong>final class</strong>，在第三方类库的一些基础类中同样如此，这样能有效避免<strong>API</strong>的使用者更改一些基础功能，在某种意义上讲，这是保证平台安全的必要手段。</li>
-<li>使用final修饰参数或者变量，也可以清楚地避免意外赋值导致的编程错误，甚至，有些人明确推荐将所有方法参数、本地变量、成员变量声明成<strong>final</strong>。</li>
-<li><strong>final</strong>变量产生了某种程度的不可变（immutable）的效果，所以，可以用于保护只读数据，尤其是在并发编程中，因为明确地不能再赋值<strong>final</strong>变量，有利于减少额外的同步开销，也可以省去一些防御性拷贝的必要。</li>
+<h5 id="下载路径"><a href="#下载路径" class="headerlink" title="下载路径"></a>下载路径</h5><p><a href="http://apache.mirrors.nublue.co.uk/zookeeper/zookeeper-3.4.14/" target="_blank" rel="noopener">zookeeper-3.4.14</a></p>
+<p>将下载好的tar.gz包放入/home路径下。</p>
+<h5 id="准备服务器"><a href="#准备服务器" class="headerlink" title="准备服务器"></a>准备服务器</h5><blockquote>
+<p>server0 192.168.23.139</p>
+<p>server1 192.168.23.140</p>
+<p>server2 192.168.23.141</p>
+</blockquote>
+<h5 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h5><ol>
+<li>在/home路径下，执行以下命令</li>
 </ol>
-<blockquote>
-<p>final 也许会有性能上的好处，但是从开发实践的角度，除非有特别的考虑，不然最好不要指望这种小技巧带来所谓的性能好处，程序最好是体现它的语义目的。</p>
-</blockquote>
-<h5 id="finally"><a href="#finally" class="headerlink" title="finally"></a>finally</h5><p>对于<strong>finally</strong>，明确知道怎么使用就足够了。需要关闭的连接等资源，更推荐使用<strong>Java 7</strong>中添加的<strong>try-with-resources</strong>语句，因为通常<strong>Java</strong>平台能够更好地处理异常情况，编码量也要少很多，何乐而不为呢？</p>
-<p>另外，有一些偏门的<strong>finally</strong>问题也会被问到，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  // do something</span><br><span class="line">  System.exit(1);</span><br><span class="line">&#125; finally&#123;</span><br><span class="line">  System.out.println(“Print from finally”);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>上面的<strong>finally</strong>里面的代码是不会被执行的，这是一个特例。</p>
-</blockquote>
-<h5 id="finalize"><a href="#finalize" class="headerlink" title="finalize"></a>finalize</h5><p><strong>finalize</strong> 的执行时和垃圾收集关联在一起的，一旦实现了非空的 <strong>finalize</strong> 方法，就会导致相应的对象回收呈现数量级上的变慢，有人专门做过 <strong>benchmark</strong>，大概是 <strong>40-50</strong> 倍的下降。<br>因为，<strong>finalize</strong> 被设计成在对象<strong>被垃圾收集前</strong>调用，这意味着实现了 <strong>finalize</strong> 方法的对象是个“特殊公民”，JVM 要对它进行额外处理。<strong>finalize</strong> 本质上成为了快速回收的阻碍者，可能导致你的对象经过多个垃圾收集周期才能被回收。</p>
-<h5 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h5><ol>
-<li><strong>final</strong>不是 immutable！<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">final List&lt;String&gt; strList = new ArrayList&lt;&gt;();</span><br><span class="line">strList.add(&quot;Hello&quot;);</span><br><span class="line">strList.add(&quot;world&quot;);  </span><br><span class="line">List&lt;String&gt; unmodifiableStrList = List.of(&quot;hello&quot;, &quot;world&quot;);</span><br><span class="line">unmodifiableStrList.add(&quot;again&quot;);</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf zookeeper-3.4.14.tar.gz -C /usr/local</span><br></pre></td></tr></table></figure>
+<h5 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h5><p>进入zookeeper的conf文件夹下，将zoo_sample.cfg配置文件复制为zoo.cfg文件，并使用vim命令修改zoo.cfg配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/zookeeper-3.4.14</span><br><span class="line">cd conf</span><br><span class="line">cp zoo_sample.cfg zoo.cfg</span><br><span class="line">vim zoo.cfg #修改配置文件</span><br></pre></td></tr></table></figure>
+<p><strong>修改如下：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dataDir=/usr/local/zookeeper-3.4.14/data</span><br><span class="line">server.0=192.168.23.139:2888:3888</span><br><span class="line">server.1=192.168.23.140:2888:3888</span><br><span class="line">server.2=192.168.23.141:2888:3888</span><br></pre></td></tr></table></figure>
+<p><strong>具体修改如图所示：</strong></p>
+<p><img src="C:\Users\Shinelon\AppData\Roaming\Typora\typora-user-images\1561522479973.png" alt="1561522479973"></p>
+<h4 id="创建zookeeper标识"><a href="#创建zookeeper标识" class="headerlink" title="创建zookeeper标识"></a>创建zookeeper标识</h4><ol>
+<li>在zookeeper目录下创建data文件夹</li>
 </ol>
-<blockquote>
-<p><strong>final</strong> 只能约束strList这个引用不可被赋值，但是strList 对象行为不被 <strong>final</strong> 影响，添加元素等操作是完全正常的。如果我们真的希望对象本身是不可变的，那么需要相应的类支持不可变的行为。在上面的这个例子中，<a href="http://openjdk.java.net/jeps/269" target="_blank" rel="noopener">List.of方法</a>创建的本身就是不可变的 List，最后那句 <strong>add</strong> 是会在运行时抛出异常的。</p>
-</blockquote>
-<p>以上就是今天的总结。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost zookeeper-3.4.14]# ll</span><br><span class="line">total 1676</span><br><span class="line">drwxr-xr-x.  2 2002 2002     223 Jun 25 07:22 bin</span><br><span class="line">-rw-rw-r--.  1 2002 2002   97426 Mar  6 11:50 build.xml</span><br><span class="line">drwxr-xr-x.  2 2002 2002      92 Jun 26 00:18 conf</span><br><span class="line">drwxr-xr-x.  2 2002 2002    4096 Mar  6 12:10 dist-maven</span><br><span class="line">-rw-rw-r--.  1 2002 2002    1709 Mar  6 11:50 ivysettings.xml</span><br><span class="line">-rw-rw-r--.  1 2002 2002   10742 Mar  6 11:50 ivy.xml</span><br><span class="line">drwxr-xr-x.  4 2002 2002    4096 Mar  6 12:09 lib</span><br><span class="line">-rw-rw-r--.  1 2002 2002   11970 Mar  6 11:50 LICENSE.txt</span><br><span class="line">-rw-rw-r--.  1 2002 2002    3132 Mar  6 11:50 NOTICE.txt</span><br><span class="line">-rw-rw-r--.  1 2002 2002   31622 Mar  6 11:50 pom.xml</span><br><span class="line">-rw-rw-r--.  1 2002 2002    1765 Mar  6 11:50 README.md</span><br><span class="line">-rw-rw-r--.  1 2002 2002    1770 Mar  6 11:50 README_packaging.txt</span><br><span class="line">drwxr-xr-x.  3 2002 2002      22 Mar  6 11:50 src</span><br><span class="line">-rw-rw-r--.  1 2002 2002 1515359 Mar  6 11:50 zookeeper-3.4.14.jar</span><br><span class="line">-rw-rw-r--.  1 2002 2002     836 Mar  6 12:10 zookeeper-3.4.14.jar.asc</span><br><span class="line">-rw-rw-r--.  1 2002 2002      33 Mar  6 11:50 zookeeper-3.4.14.jar.md5</span><br><span class="line">-rw-rw-r--.  1 2002 2002      41 Mar  6 11:50 zookeeper-3.4.14.jar.sha1</span><br><span class="line">drwxr-xr-x.  3 2002 2002      47 Mar  6 12:09 zookeeper-client</span><br><span class="line">drwxr-xr-x. 12 2002 2002    4096 Mar  6 12:09 zookeeper-contrib</span><br><span class="line">drwxr-xr-x.  7 2002 2002    4096 Mar  6 12:09 zookeeper-docs</span><br><span class="line">drwxr-xr-x.  3 2002 2002      35 Mar  6 12:09 zookeeper-it</span><br><span class="line">drwxr-xr-x.  4 2002 2002      46 Mar  6 12:09 zookeeper-jute</span><br><span class="line">drwxr-xr-x.  5 2002 2002     176 Mar  6 12:09 zookeeper-recipes</span><br><span class="line">drwxr-xr-x.  3 2002 2002      32 Mar  6 12:09 zookeeper-server</span><br><span class="line"></span><br><span class="line">$ mkdir data</span><br></pre></td></tr></table></figure>
+<p><img src="C:\Users\Shinelon\AppData\Roaming\Typora\typora-user-images\1561522787591.png" alt="1561522787591"></p>
+<ol start="2">
+<li>进入data目录下创建myid文件,并在myid文件里添加一个标识数字1，每台服务器可以使用自增标识。比如：192.168.23.139使用数字1， 192.168.23.140使用数字2，192.168.23.141使用数字3.以此类推</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd data</span><br><span class="line">vim myid</span><br></pre></td></tr></table></figure>
+<h5 id="将zookeeper文件夹拷贝到其他服务器"><a href="#将zookeeper文件夹拷贝到其他服务器" class="headerlink" title="将zookeeper文件夹拷贝到其他服务器"></a>将zookeeper文件夹拷贝到其他服务器</h5><ol>
+<li>是用scp拷贝到其他服务器，使用-r表示递归拷贝</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r  zookeeper-3.4.14/ root@192.168.23.140:/usr/local/</span><br><span class="line">scp -r  zookeeper-3.4.14/ root@192.168.23.141:/usr/local/</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>修改其他服务器上的myid文件</li>
+</ol>
+<h5 id="启动集群"><a href="#启动集群" class="headerlink" title="启动集群"></a>启动集群</h5><ol>
+<li>在每台服务器上执行以下命令</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/zkServer.sh start</span><br></pre></td></tr></table></figure>
+<h5 id="检查是否启动成功"><a href="#检查是否启动成功" class="headerlink" title="检查是否启动成功"></a>检查是否启动成功</h5><p>Zookeeper全部启动后查看Zookeeper状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@node01 zookeeper-3.4.14]# bin/zkServer.sh status</span><br><span class="line">ZooKeeper JMX enabled by default</span><br><span class="line">Using config: /usr/local/zookeeper-3.4.14/bin/../conf/zoo.cfg</span><br><span class="line">Mode: follower</span><br></pre></td></tr></table></figure>
+<h5 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h5><p>如果没有启动请查看防火墙是否关闭</p>
+<p>CentOS 7.0默认使用的是firewall作为防火墙</p>
+<h6 id="停止firewall"><a href="#停止firewall" class="headerlink" title="停止firewall"></a>停止firewall</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service</span><br></pre></td></tr></table></figure>
+<h6 id="禁止firewall开机启动"><a href="#禁止firewall开机启动" class="headerlink" title="禁止firewall开机启动"></a>禁止firewall开机启动</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl disable firewalld.service</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -402,7 +428,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
           
         </div>
       
@@ -415,8 +441,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/17/Throwable、Error、Exception的区别/" rel="next" title="Throwable、Error、Exception的区别">
-                <i class="fa fa-chevron-left"></i> Throwable、Error、Exception的区别
+              <a href="/2019/05/03/如何搭建Spring-Cloud项目/" rel="next" title="如何搭建Spring Cloud项目">
+                <i class="fa fa-chevron-left"></i> 如何搭建Spring Cloud项目
               </a>
             
           </div>
@@ -425,8 +451,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/21/强引用、软引用、弱引用、幻象引用有什么区别/" rel="prev" title="强引用、软引用、弱引用、幻象引用有什么区别">
-                强引用、软引用、弱引用、幻象引用有什么区别 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/28/Kafka集群搭建/" rel="prev" title="Kafka集群搭建">
+                Kafka集群搭建 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -621,7 +647,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#适用场景"><span class="nav-number">1.</span> <span class="nav-text">适用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#final"><span class="nav-number">1.1.</span> <span class="nav-text">final</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#finally"><span class="nav-number">1.2.</span> <span class="nav-text">finally</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#finalize"><span class="nav-number">1.3.</span> <span class="nav-text">finalize</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#拓展"><span class="nav-number">1.4.</span> <span class="nav-text">拓展</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#搭建环境"><span class="nav-number">1.</span> <span class="nav-text">搭建环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载路径"><span class="nav-number">2.</span> <span class="nav-text">下载路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#准备服务器"><span class="nav-number">3.</span> <span class="nav-text">准备服务器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解压"><span class="nav-number">4.</span> <span class="nav-text">解压</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#修改配置文件"><span class="nav-number">5.</span> <span class="nav-text">修改配置文件</span></a></li></ol><li class="nav-item nav-level-4"><a class="nav-link" href="#创建zookeeper标识"><span class="nav-number"></span> <span class="nav-text">创建zookeeper标识</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#将zookeeper文件夹拷贝到其他服务器"><span class="nav-number">1.</span> <span class="nav-text">将zookeeper文件夹拷贝到其他服务器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动集群"><span class="nav-number">2.</span> <span class="nav-text">启动集群</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#检查是否启动成功"><span class="nav-number">3.</span> <span class="nav-text">检查是否启动成功</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#错误"><span class="nav-number">4.</span> <span class="nav-text">错误</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#停止firewall"><span class="nav-number">4.1.</span> <span class="nav-text">停止firewall</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#禁止firewall开机启动"><span class="nav-number">4.2.</span> <span class="nav-text">禁止firewall开机启动</span></a></li></ol></li></ol></li></div>
             
 
           </div>

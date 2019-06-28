@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Kafka,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Kafka介绍Kafka是一种高吞吐量的分布式发布订阅消息系统，有如下特性：  通过O(1)的磁盘数据结构提供消息的持久化，这种结构对于即使数以TB的消息存储也能够保持长时间的稳定性能。  高吞吐量：即使是非常普通的硬件kafka也可以支持每秒数十万的消息。  支持通过kafka服务器和消费机集群来分区消息。  支持Hadoop并行数据加载。">
+<meta name="keywords" content="Kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka集群搭建">
+<meta property="og:url" content="http://yangweijun.top/2019/06/28/Kafka集群搭建/index.html">
+<meta property="og:site_name" content="weijunzhe&#39;s blog">
+<meta property="og:description" content="Kafka介绍Kafka是一种高吞吐量的分布式发布订阅消息系统，有如下特性：  通过O(1)的磁盘数据结构提供消息的持久化，这种结构对于即使数以TB的消息存储也能够保持长时间的稳定性能。  高吞吐量：即使是非常普通的硬件kafka也可以支持每秒数十万的消息。  支持通过kafka服务器和消费机集群来分区消息。  支持Hadoop并行数据加载。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-28T01:35:55.156Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka集群搭建">
+<meta name="twitter:description" content="Kafka介绍Kafka是一种高吞吐量的分布式发布订阅消息系统，有如下特性：  通过O(1)的磁盘数据结构提供消息的持久化，这种结构对于即使数以TB的消息存储也能够保持长时间的稳定性能。  高吞吐量：即使是非常普通的硬件kafka也可以支持每秒数十万的消息。  支持通过kafka服务器和消费机集群来分区消息。  支持Hadoop并行数据加载。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yangweijun.top/2019/06/28/Kafka集群搭建/">
+
+
+
+
+
+  <title>Kafka集群搭建 | weijunzhe's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">weijunzhe's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hello,world</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/06/28/Kafka集群搭建/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weijunzhe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="weijunzhe's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kafka集群搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-28T09:35:09+08:00">
+                2019-06-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="Kafka介绍"><a href="#Kafka介绍" class="headerlink" title="Kafka介绍"></a>Kafka介绍</h5><p>Kafka是一种高吞吐量的分布式发布订阅消息系统，有如下特性：</p>
+<ul>
+<li><p>通过O(1)的磁盘数据结构提供消息的持久化，这种结构对于即使数以TB的消息存储也能够保持长时间的稳定性能。</p>
+</li>
+<li><p>高吞吐量：即使是非常普通的硬件kafka也可以支持每秒数十万的消息。</p>
+</li>
+<li><p>支持通过kafka服务器和消费机集群来分区消息。</p>
+</li>
+<li><p>支持Hadoop并行数据加载。</p>
+<a id="more"></a>
+</li>
+</ul>
+<p>Kafka的目的是提供一个发布订阅解决方案，它可以处理消费者规模的网站中的所有动作流数据。 这种动作（网页浏览，搜索和其他用户的行动）是在现代网络上的许多社会功能的一个关键因素。 这些数据通常是由于吞吐量的要求而通过处理日志和日志聚合来解决。 对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。</p>
+<p>kafka是用Scala编写，用scalac编译器把源文件编译成Java的class文件（即在JVM上运行的字节码），因此Scala是基于JVM的语言，所以使用Kafka需要机器上游JVM支持，本文使用jdk版本为jdk-7u75. </p>
+<p>以3台为例，如果是一个Follower宕机，还有2台服务器提供访问，因为Zookeeper上的数据是有多个副本的，数据并不会丢失，如果是一个Leader宕机，Zookeeper会选举出新的Leader。为什么是奇数台，如果Zookeeper 集群是3台，允许宕机1台，如果是4台，同样是允许1台宕机，因为选举算法要求”超过半数“，所以多出的一台没有意义。</p>
+<h5 id="配置步骤"><a href="#配置步骤" class="headerlink" title="配置步骤"></a>配置步骤</h5><p>Kafka自带了zookeeper，但是一般集群都会有zk，因此使用集群已有的zookeeper。本次不使用Kafka自带的zookeeper。</p>
+<ol>
+<li>下载<a href="http://www.mirrorservice.org/sites/ftp.apache.org/kafka/2.3.0/kafka_2.11-2.3.0.tgz" target="_blank" rel="noopener">kafka_2.11-0.10.0.0.tgz</a></li>
+<li>配置文件 server.properties</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">############################# Server Basics #############################</span><br><span class="line"># 唯一标识一个broker.</span><br><span class="line">broker.id=1</span><br><span class="line">############################# Socket Server Settings #############################</span><br><span class="line">#绑定服务监听的地址和端口，要填写hostname -i 出来的地址，否则可能会绑定到127.0.0.1,producer可能会发不出消息</span><br><span class="line">listeners=PLAINTEXT://192.168.23.139:9092</span><br><span class="line">#broker对producers和consumers服务的地址和端口，如果没有配置，使用listeners的配置，本文没有配置该项</span><br><span class="line">#advertised.listeners=PLAINTEXT://your.host.name:9092</span><br><span class="line"># 处理网络请求的线程数</span><br><span class="line">num.network.threads=3</span><br><span class="line"># 处理磁盘I/O的线程数</span><br><span class="line">num.io.threads=8</span><br><span class="line"># socket server的发送buffer大小 (SO_SNDBUF) </span><br><span class="line">socket.send.buffer.bytes=102400</span><br><span class="line"># socket server的接收buffer大小 (SO_RCVBUF)</span><br><span class="line">socket.receive.buffer.bytes=102400</span><br><span class="line">#一个请求的最大size，用来保护防止oom</span><br><span class="line">socket.request.max.bytes=104857600</span><br><span class="line">############################# Log Basics #############################</span><br><span class="line">#存放日志和消息的目录，可以是用逗号分开的目录，同样不推荐使用/tmp</span><br><span class="line">log.dirs=/usr/local/kafka_2.11-2.3.0/logs</span><br><span class="line">#每个topic默认partitions的数量，数量较大表示消费者可以有更大的并行度。</span><br><span class="line">num.partitions=2</span><br><span class="line"># The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.</span><br><span class="line"># This value is recommended to be increased for installations with data dirs located in RAID array.</span><br><span class="line">num.recovery.threads.per.data.dir=1</span><br><span class="line">#日志的过期时间，超过后被删除，单位小时</span><br><span class="line">log.retention.hours=168</span><br><span class="line">#一个日志文件最大大小，超过会新建一个文件</span><br><span class="line">log.segment.bytes=1073741824</span><br><span class="line">#根据过期策略检查过期文件的时间间隔，单位毫秒</span><br><span class="line">log.retention.check.interval.ms=300000</span><br><span class="line">############################# Zookeeper #############################</span><br><span class="line">#Zookeeper的连接配置，用逗号隔开，也可以用192.168.23.139:2181/kakfa这样的方式指定kafka数据在zk中的根目录</span><br><span class="line">zookeeper.connect=192.168.23.139:2181,192.168.23.140:2181,192.168.23.141:2181</span><br><span class="line"># 连接zk的超时时间</span><br><span class="line">zookeeper.connection.timeout.ms=6000</span><br></pre></td></tr></table></figure>
+<p>主要配置文件为server.properties，对于producer和consumer分别有producer.properties和consumer.properties，但是一般不需要单独配置，可以从server.properties中读取。 </p>
+<h5 id="启动各个节点"><a href="#启动各个节点" class="headerlink" title="启动各个节点"></a>启动各个节点</h5><p>启动各节点，分发此配置文件，修改broker.id和listeners地址，建立相应的目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@server0 kafka_2.11-2.3.0]# ./bin/kafka-server-start.sh -daemon config/server.properties</span><br><span class="line">[root@server1 kafka_2.11-2.3.0]# ./bin/kafka-server-start.sh -daemon config/server.properties</span><br><span class="line">[root@server2 kafka_2.11-2.3.0]# ./bin/kafka-server-start.sh -daemon config/server.properties</span><br></pre></td></tr></table></figure>
+<p>-daemon放在后台运行。 </p>
+<h5 id="验证是否成功"><a href="#验证是否成功" class="headerlink" title="验证是否成功"></a>验证是否成功</h5><ol>
+<li>创建一个topic名为my-test</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@server0 kafka_2.11-2.3.0]# bin/kafka-topics.sh --create --zookeeper 172.23.8.144:2181 --replication-factor 3 --partitions 1 --topic my-test</span><br><span class="line">Created topic &quot;my-test&quot;.</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>发送消息，ctrl+c终止</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@server0 kafka_2.11-2.3.0]# bin/kafka-console-producer.sh --broker-list 172.23.8.144:9092 --topic my-test</span><br><span class="line">今天是个好日子</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>另一台机器消费</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@server0 kafka_2.11-2.3.0]# bin/kafka-console-consumer.sh --zookeeper slave3:2181 --from-beginning --topic my-test</span><br><span class="line">今天是个好日子</span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+<p>继续发送消息则在消费者终端会一直出现新产生的消息。至此,kafka集群搭建成功。 </p>
+<h5 id="Kafka-HelloWorld"><a href="#Kafka-HelloWorld" class="headerlink" title="Kafka HelloWorld"></a>Kafka HelloWorld</h5><p>在kafka的手册中给出了java版的producer和cousumer的代码示例.<br>修改下地址，逗号隔开，该地址是集群的子集，用来探测集群。 </p>
+<ol>
+<li>Producer代码示例</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Properties;</span><br><span class="line">import org.apache.kafka.clients.producer.KafkaProducer;</span><br><span class="line">import org.apache.kafka.clients.producer.ProducerRecord;</span><br><span class="line">public class Producer &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Properties props = new Properties();</span><br><span class="line">        props.put(&quot;bootstrap.servers&quot;,</span><br><span class="line">                &quot;192.168.23.139:9092,192.168.23.140:9092,192.168.23.141:9092&quot;);//该地址是集群的子集，用来探测集群。</span><br><span class="line">        props.put(&quot;acks&quot;, &quot;all&quot;);// 记录完整提交，最慢的但是最大可能的持久化</span><br><span class="line">        props.put(&quot;retries&quot;, 3);// 请求失败重试的次数</span><br><span class="line">        props.put(&quot;batch.size&quot;, 16384);// batch的大小</span><br><span class="line">        props.put(&quot;linger.ms&quot;, 1);// 默认情况即使缓冲区有剩余的空间，也会立即发送请求，设置一段时间用来等待从而将缓冲区填的更多，单位为毫秒，producer发送数据会延迟1ms，可以减少发送到kafka服务器的请求数据</span><br><span class="line">        props.put(&quot;buffer.memory&quot;, 33554432);// 提供给生产者缓冲内存总量</span><br><span class="line">        props.put(&quot;key.serializer&quot;,</span><br><span class="line">                &quot;org.apache.kafka.common.serialization.StringSerializer&quot;);// 序列化的方式，</span><br><span class="line">                                                                            // ByteArraySerializer或者StringSerializer</span><br><span class="line">        props.put(&quot;value.serializer&quot;,</span><br><span class="line">                &quot;org.apache.kafka.common.serialization.StringSerializer&quot;);</span><br><span class="line">        KafkaProducer&lt;String, String&gt; producer = new KafkaProducer&lt;&gt;(props);</span><br><span class="line">        for (int i = 0; i &lt; 10000; i++) &#123;</span><br><span class="line">            // 三个参数分别为topic, key,value，send()是异步的，添加到缓冲区立即返回，更高效。</span><br><span class="line">            producer.send(new ProducerRecord&lt;String, String&gt;(&quot;my-topic&quot;,</span><br><span class="line">                    Integer.toString(i), Integer.toString(i)));</span><br><span class="line">        &#125;</span><br><span class="line">        producer.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Consumer代码示例</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Arrays;</span><br><span class="line">import java.util.Properties;</span><br><span class="line">import org.apache.kafka.clients.consumer.ConsumerRecord;</span><br><span class="line">import org.apache.kafka.clients.consumer.ConsumerRecords;</span><br><span class="line">import org.apache.kafka.clients.consumer.KafkaConsumer;</span><br><span class="line">public class Consumer &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Properties props = new Properties();</span><br><span class="line">        props.put(&quot;bootstrap.servers&quot;,</span><br><span class="line">                &quot;192.168.23.139:9092,192.168.23.140:9092,192.168.23.141:9092&quot;);// 该地址是集群的子集，用来探测集群。</span><br><span class="line">        props.put(&quot;group.id&quot;, &quot;test&quot;);// cousumer的分组id</span><br><span class="line">        props.put(&quot;enable.auto.commit&quot;, &quot;true&quot;);// 自动提交offsets</span><br><span class="line">        props.put(&quot;auto.commit.interval.ms&quot;, &quot;1000&quot;);// 每隔1s，自动提交offsets</span><br><span class="line">        props.put(&quot;session.timeout.ms&quot;, &quot;30000&quot;);// Consumer向集群发送自己的心跳，超时则认为Consumer已经死了，kafka会把它的分区分配给其他进程</span><br><span class="line">        props.put(&quot;key.deserializer&quot;,</span><br><span class="line">                &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;);// 反序列化器</span><br><span class="line">        props.put(&quot;value.deserializer&quot;,</span><br><span class="line">                &quot;org.apache.kafka.common.serialization.StringDeserializer&quot;);</span><br><span class="line">        KafkaConsumer&lt;String, String&gt; consumer = new KafkaConsumer&lt;&gt;(props);</span><br><span class="line">        consumer.subscribe(Arrays.asList(&quot;my-topic&quot;));// 订阅的topic,可以多个</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            ConsumerRecords&lt;String, String&gt; records = consumer.poll(100);</span><br><span class="line">            for (ConsumerRecord&lt;String, String&gt; record : records) &#123;</span><br><span class="line">                System.out.printf(&quot;offset = %d, key = %s, value = %s&quot;,</span><br><span class="line">                        record.offset(), record.key(), record.value());</span><br><span class="line">                System.out.println();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>分别运行即可。看到comsumer打印出消息日志。</li>
+</ol>
+<p>以上参考博客：<a href="https://blog.csdn.net/z769184640/article/details/51585419" target="_blank" rel="noopener">https://blog.csdn.net/z769184640/article/details/51585419</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="weijunzhe 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="weijunzhe 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/28/Zookeeper集群搭建/" rel="next" title="Zookeeper集群搭建">
+                <i class="fa fa-chevron-left"></i> Zookeeper集群搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/28/Storm集群搭建/" rel="prev" title="Storm集群搭建">
+                Storm集群搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">weijunzhe</p>
+              <p class="site-description motion-element" itemprop="description">weijunzhe</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="/wechat" target="_blank" title="Wechat">
+                      
+                        <i class="fa fa-fw fa-weixin"></i>Wechat</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/weijunzhe" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1104774305@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-mobile"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/qq_37753580" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-bell"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=408280420&auto=1&height=66"></iframe>
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#Kafka介绍"><span class="nav-number">1.</span> <span class="nav-text">Kafka介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置步骤"><span class="nav-number">2.</span> <span class="nav-text">配置步骤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动各个节点"><span class="nav-number">3.</span> <span class="nav-text">启动各个节点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#验证是否成功"><span class="nav-number">4.</span> <span class="nav-text">验证是否成功</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Kafka-HelloWorld"><span class="nav-number">5.</span> <span class="nav-text">Kafka HelloWorld</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 
+<a href="http://www.miitbeian.gov.cn/">京ICP备18031051号-1</a> 
+<span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weijunzhe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
