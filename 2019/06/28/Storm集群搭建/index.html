@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
 <meta property="og:description" content="环境 版本: Storm 1.2.2 java: jdk 1.7 系统：centos7 zookeeper-3.4.14">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="c:/Users/Shinelon/Desktop/FireShot%20Capture%20037%20-%20Storm%20UI%20-%20http___192.168.23.139_8088_index.html.png">
-<meta property="og:image" content="https://img-blog.csdn.net/20161013225512536">
-<meta property="og:updated_time" content="2019-06-28T01:37:33.599Z">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/FireShot%20Capture%20037%20-%20Storm%20UI%20-%20http___192.168.23.139_8088_index.html.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/20161013225512536.png">
+<meta property="og:updated_time" content="2019-06-28T01:59:37.923Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Storm集群搭建">
 <meta name="twitter:description" content="环境 版本: Storm 1.2.2 java: jdk 1.7 系统：centos7 zookeeper-3.4.14">
-<meta name="twitter:image" content="c:/Users/Shinelon/Desktop/FireShot%20Capture%20037%20-%20Storm%20UI%20-%20http___192.168.23.139_8088_index.html.png">
+<meta name="twitter:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/FireShot%20Capture%20037%20-%20Storm%20UI%20-%20http___192.168.23.139_8088_index.html.png">
 
 
 
@@ -337,14 +337,16 @@
 <p>版本: Storm 1.2.2</p>
 <p>java: jdk 1.7</p>
 <p>系统：centos7</p>
-<p>zookeeper-3.4.14<br><a id="more"></a><br>分别在三台机器上部署</p>
+<p>zookeeper-3.4.14</p>
 </blockquote>
+<a id="more"></a>
+<p>分别在三台机器上部署</p>
 <blockquote>
 <p>server0 192.168.23.139(Master)</p>
 <p>server1 192.168.23.140(Supervisor)</p>
 <p>server2 192.168.23.141(Supervisor)</p>
 </blockquote>
-<p>安装Storm之前，需要先安装zookeeper,请看我之前的博客<strong>Zookeeper集群搭建</strong></p>
+<p>安装Storm之前，需要先安装zookeeper,请看我之前的博客 <a href="http://yangweijun.top/2019/06/28/Zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/#more">Zookeeper集群搭建</a></p>
 <h5 id="下载路径"><a href="#下载路径" class="headerlink" title="下载路径"></a>下载路径</h5><p><a href="http://mirror.ox.ac.uk/sites/rsync.apache.org/storm/apache-storm-1.2.2/apache-storm-1.2.2.tar.gz" target="_blank" rel="noopener">apache-storm-1.2.2.tar.gz</a></p>
 <h5 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h5><p>将Storm解压到指定目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf apache-storm-1.2.2.tar.gz -C /usr/local</span><br></pre></td></tr></table></figure>
@@ -369,7 +371,7 @@
 <h5 id="启动web登录查看"><a href="#启动web登录查看" class="headerlink" title="启动web登录查看"></a>启动web登录查看</h5><blockquote>
 <p><a href="http://192.168.23.139:8088" target="_blank" rel="noopener">http://192.168.23.139:8088</a></p>
 </blockquote>
-<p><img src="C:\Users\Shinelon\Desktop\FireShot Capture 037 - Storm UI - http___192.168.23.139_8088_index.html.png" alt="图片"></p>
+<p><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/FireShot%20Capture%20037%20-%20Storm%20UI%20-%20http___192.168.23.139_8088_index.html.png" alt="图片"></p>
 <p>注意：启动时加载很慢，请耐心等待。如果没有启动成功，请查看日志。</p>
 <h5 id="可能遇到的问题"><a href="#可能遇到的问题" class="headerlink" title="可能遇到的问题"></a>可能遇到的问题</h5><ol>
 <li>web不能正常登录</li>
@@ -390,7 +392,7 @@
 <p> <a href="https://blog.csdn.net/zz657114506/article/details/54429965" target="_blank" rel="noopener">storm集群启动停止脚本</a></p>
 <p>其他参考：</p>
 <p>转载自：<a href="https://blog.csdn.net/qq_15581405/article/details/52811104" target="_blank" rel="noopener">关于storm nimbus &gt; /dev/null 2&gt;&amp;1</a></p>
-<p><img src="https://img-blog.csdn.net/20161013225512536" alt=""></p>
+<p><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/20161013225512536.png" alt="nimbus"></p>
 <p>如图所示：<br>bin/storm nimbus会有两个输出，一个标准输出，一个错误输出 </p>
 <p>2&gt;&amp;1的作用是将 2即错误输出 的内容重定向到&amp;1即标准输出中，然后&gt;/dev/null是将两者的结果输入到/dev/null中，相当于抛弃掉。至于最后一个&amp;，因为storm会一直运行，不会自动停掉，页面上就会不停的有内容。&amp;的作用就是将storm拿到后台执行。   </p>
 

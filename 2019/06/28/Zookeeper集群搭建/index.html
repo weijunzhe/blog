@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
 <meta property="og:description" content="搭建环境 操作系统：Centos7 java: jdk 1.7+ 版本：3.4.14">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="c:/Users/Shinelon/AppData/Roaming/Typora/typora-user-images/1561522479973.png">
-<meta property="og:image" content="c:/Users/Shinelon/AppData/Roaming/Typora/typora-user-images/1561522787591.png">
-<meta property="og:updated_time" content="2019-06-28T01:34:19.478Z">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/1561522479973.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/1561522787591.png">
+<meta property="og:updated_time" content="2019-06-28T01:57:07.871Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper集群搭建">
 <meta name="twitter:description" content="搭建环境 操作系统：Centos7 java: jdk 1.7+ 版本：3.4.14">
-<meta name="twitter:image" content="c:/Users/Shinelon/AppData/Roaming/Typora/typora-user-images/1561522479973.png">
+<meta name="twitter:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/1561522479973.png">
 
 
 
@@ -336,9 +336,8 @@
         <h5 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h5><blockquote>
 <p>操作系统：Centos7</p>
 <p>java: jdk 1.7+</p>
-<p>版本：3.4.14</p>
+<p>版本：3.4.14<br><a id="more"></a></p>
 </blockquote>
-<a id="more"></a>
 <h5 id="下载路径"><a href="#下载路径" class="headerlink" title="下载路径"></a>下载路径</h5><p><a href="http://apache.mirrors.nublue.co.uk/zookeeper/zookeeper-3.4.14/" target="_blank" rel="noopener">zookeeper-3.4.14</a></p>
 <p>将下载好的tar.gz包放入/home路径下。</p>
 <h5 id="准备服务器"><a href="#准备服务器" class="headerlink" title="准备服务器"></a>准备服务器</h5><blockquote>
@@ -355,12 +354,12 @@
 <p><strong>修改如下：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dataDir=/usr/local/zookeeper-3.4.14/data</span><br><span class="line">server.0=192.168.23.139:2888:3888</span><br><span class="line">server.1=192.168.23.140:2888:3888</span><br><span class="line">server.2=192.168.23.141:2888:3888</span><br></pre></td></tr></table></figure>
 <p><strong>具体修改如图所示：</strong></p>
-<p><img src="C:\Users\Shinelon\AppData\Roaming\Typora\typora-user-images\1561522479973.png" alt="1561522479973"></p>
+<p><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/1561522479973.png" alt="1561522479973"></p>
 <h4 id="创建zookeeper标识"><a href="#创建zookeeper标识" class="headerlink" title="创建zookeeper标识"></a>创建zookeeper标识</h4><ol>
 <li>在zookeeper目录下创建data文件夹</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost zookeeper-3.4.14]# ll</span><br><span class="line">total 1676</span><br><span class="line">drwxr-xr-x.  2 2002 2002     223 Jun 25 07:22 bin</span><br><span class="line">-rw-rw-r--.  1 2002 2002   97426 Mar  6 11:50 build.xml</span><br><span class="line">drwxr-xr-x.  2 2002 2002      92 Jun 26 00:18 conf</span><br><span class="line">drwxr-xr-x.  2 2002 2002    4096 Mar  6 12:10 dist-maven</span><br><span class="line">-rw-rw-r--.  1 2002 2002    1709 Mar  6 11:50 ivysettings.xml</span><br><span class="line">-rw-rw-r--.  1 2002 2002   10742 Mar  6 11:50 ivy.xml</span><br><span class="line">drwxr-xr-x.  4 2002 2002    4096 Mar  6 12:09 lib</span><br><span class="line">-rw-rw-r--.  1 2002 2002   11970 Mar  6 11:50 LICENSE.txt</span><br><span class="line">-rw-rw-r--.  1 2002 2002    3132 Mar  6 11:50 NOTICE.txt</span><br><span class="line">-rw-rw-r--.  1 2002 2002   31622 Mar  6 11:50 pom.xml</span><br><span class="line">-rw-rw-r--.  1 2002 2002    1765 Mar  6 11:50 README.md</span><br><span class="line">-rw-rw-r--.  1 2002 2002    1770 Mar  6 11:50 README_packaging.txt</span><br><span class="line">drwxr-xr-x.  3 2002 2002      22 Mar  6 11:50 src</span><br><span class="line">-rw-rw-r--.  1 2002 2002 1515359 Mar  6 11:50 zookeeper-3.4.14.jar</span><br><span class="line">-rw-rw-r--.  1 2002 2002     836 Mar  6 12:10 zookeeper-3.4.14.jar.asc</span><br><span class="line">-rw-rw-r--.  1 2002 2002      33 Mar  6 11:50 zookeeper-3.4.14.jar.md5</span><br><span class="line">-rw-rw-r--.  1 2002 2002      41 Mar  6 11:50 zookeeper-3.4.14.jar.sha1</span><br><span class="line">drwxr-xr-x.  3 2002 2002      47 Mar  6 12:09 zookeeper-client</span><br><span class="line">drwxr-xr-x. 12 2002 2002    4096 Mar  6 12:09 zookeeper-contrib</span><br><span class="line">drwxr-xr-x.  7 2002 2002    4096 Mar  6 12:09 zookeeper-docs</span><br><span class="line">drwxr-xr-x.  3 2002 2002      35 Mar  6 12:09 zookeeper-it</span><br><span class="line">drwxr-xr-x.  4 2002 2002      46 Mar  6 12:09 zookeeper-jute</span><br><span class="line">drwxr-xr-x.  5 2002 2002     176 Mar  6 12:09 zookeeper-recipes</span><br><span class="line">drwxr-xr-x.  3 2002 2002      32 Mar  6 12:09 zookeeper-server</span><br><span class="line"></span><br><span class="line">$ mkdir data</span><br></pre></td></tr></table></figure>
-<p><img src="C:\Users\Shinelon\AppData\Roaming\Typora\typora-user-images\1561522787591.png" alt="1561522787591"></p>
+<p><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/06/28/1561522787591.png" alt="1561522787591"></p>
 <ol start="2">
 <li>进入data目录下创建myid文件,并在myid文件里添加一个标识数字1，每台服务器可以使用自增标识。比如：192.168.23.139使用数字1， 192.168.23.140使用数字2，192.168.23.141使用数字3.以此类推</li>
 </ol>
