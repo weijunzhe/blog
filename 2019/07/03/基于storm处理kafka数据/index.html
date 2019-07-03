@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。 关于storm Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和E">
+<meta name="description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。">
 <meta name="keywords" content="storm、kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于storm处理kafka数据">
 <meta property="og:url" content="http://yangweijun.top/2019/07/03/基于storm处理kafka数据/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。 关于storm Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和E">
+<meta property="og:description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703114928.png">
 <meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703115340.png">
 <meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703122528.png">
-<meta property="og:updated_time" content="2019-07-03T04:27:33.310Z">
+<meta property="og:updated_time" content="2019-07-03T04:29:45.808Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于storm处理kafka数据">
-<meta name="twitter:description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。 关于storm Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和E">
+<meta name="twitter:description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。">
 <meta name="twitter:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703114928.png">
 
 
@@ -335,6 +335,7 @@
 
       
         <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。</p>
+<a id="more"></a>
 <h4 id="关于storm"><a href="#关于storm" class="headerlink" title="关于storm"></a>关于storm</h4><blockquote>
 <p>Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和ETL等领域。Storm的部署管理非常简单，而且，在同类的流式计算工具，Storm的性能也是非常出众的。</p>
 </blockquote>
