@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="storm、kafka,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。 关于storm Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和E">
+<meta name="keywords" content="storm、kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于storm处理kafka数据">
+<meta property="og:url" content="http://yangweijun.top/2019/07/03/基于storm处理kafka数据/index.html">
+<meta property="og:site_name" content="weijunzhe&#39;s blog">
+<meta property="og:description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。 关于storm Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和E">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703114928.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703115340.png">
+<meta property="og:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703122528.png">
+<meta property="og:updated_time" content="2019-07-03T04:27:33.310Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于storm处理kafka数据">
+<meta name="twitter:description" content="背景最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。 关于storm Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和E">
+<meta name="twitter:image" content="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703114928.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yangweijun.top/2019/07/03/基于storm处理kafka数据/">
+
+
+
+
+
+  <title>基于storm处理kafka数据 | weijunzhe's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">weijunzhe's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hello,world</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/07/03/基于storm处理kafka数据/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="weijunzhe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="weijunzhe's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于storm处理kafka数据</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-03T10:58:25+08:00">
+                2019-07-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>最近有个项目需要将kafka中的数据进行去重然后保存到Mongo中，由于数据量太大所以首选使用storm进行实时处理。这里主要记录是关于kafka和storm的整合。</p>
+<h4 id="关于storm"><a href="#关于storm" class="headerlink" title="关于storm"></a>关于storm</h4><blockquote>
+<p>Storm是一个免费开源、分布式、高容错的实时计算系统。Storm令持续不断的流计算变得容易，弥补了Hadoop批处理所不能满足的实时要求。Storm经常用于在实时分析、在线机器学习、持续计算、分布式远程调用和ETL等领域。Storm的部署管理非常简单，而且，在同类的流式计算工具，Storm的性能也是非常出众的。</p>
+</blockquote>
+<h4 id="关于kafka"><a href="#关于kafka" class="headerlink" title="关于kafka"></a>关于kafka</h4><blockquote>
+<p>Kafka是一种高吞吐量的分布式发布订阅消息系统。</p>
+</blockquote>
+<h4 id="项目搭建"><a href="#项目搭建" class="headerlink" title="项目搭建"></a>项目搭建</h4><p>使用maven进行jar包集成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">        &lt;kafka.version&gt;1.0.0&lt;/kafka.version&gt;</span><br><span class="line">        &lt;storm.version&gt;1.2.1&lt;/storm.version&gt;</span><br><span class="line">        &lt;fastjson.version&gt;1.2.41&lt;/fastjson.version&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;!--kafka jar --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.kafka&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;kafka_2.12&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;kafka.version&#125;&lt;/version&gt;</span><br><span class="line">            &lt;exclusions&gt;</span><br><span class="line">                &lt;exclusion&gt;</span><br><span class="line">                    &lt;groupId&gt;org.apache.zookeeper&lt;/groupId&gt;</span><br><span class="line">                    &lt;artifactId&gt;zookeeper&lt;/artifactId&gt;</span><br><span class="line">                &lt;/exclusion&gt;</span><br><span class="line">                &lt;exclusion&gt;</span><br><span class="line">                    &lt;groupId&gt;org.slf4j&lt;/groupId&gt;</span><br><span class="line">                    &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;</span><br><span class="line">                &lt;/exclusion&gt;</span><br><span class="line">                &lt;exclusion&gt;</span><br><span class="line">                    &lt;groupId&gt;log4j&lt;/groupId&gt;</span><br><span class="line">                    &lt;artifactId&gt;log4j&lt;/artifactId&gt;</span><br><span class="line">                &lt;/exclusion&gt;</span><br><span class="line">            &lt;/exclusions&gt;</span><br><span class="line">            &lt;scope&gt;provided&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.kafka&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;kafka-clients&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;kafka.version&#125;&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.kafka&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;kafka-streams&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;kafka.version&#125;&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!--storm相关jar  --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.storm&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;storm-core&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;storm.version&#125;&lt;/version&gt;</span><br><span class="line">            &lt;!--排除相关依赖  --&gt;</span><br><span class="line">            &lt;exclusions&gt;</span><br><span class="line">                &lt;!--&lt;exclusion&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;/exclusion&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;exclusion&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;artifactId&gt;log4j-1.2-api&lt;/artifactId&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;/exclusion&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;exclusion&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;artifactId&gt;log4j-web&lt;/artifactId&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;/exclusion&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;exclusion&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;groupId&gt;org.slf4j&lt;/groupId&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;/exclusion&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;exclusion&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;artifactId&gt;ring-cors&lt;/artifactId&gt;--&gt;</span><br><span class="line">                    &lt;!--&lt;groupId&gt;ring-cors&lt;/groupId&gt;--&gt;</span><br><span class="line">                &lt;!--&lt;/exclusion&gt;--&gt;</span><br><span class="line">            &lt;/exclusions&gt;</span><br><span class="line">            &lt;scope&gt;provided&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.storm&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;storm-kafka&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;storm.version&#125;&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;!-- Protocol Buffers --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.8.0&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- https://mvnrepository.com/artifact/com.codahale.metrics/metrics-core --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;com.codahale.metrics&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;metrics-core&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.0.2&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!--fastjson 相关jar --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;fastjson&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;fastjson.version&#125;&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- MongoDB连接驱动 --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.mongodb&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;mongo-java-driver&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.7.0&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;!-- https://mvnrepository.com/artifact/redis.clients/jedis --&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;redis.clients&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;jedis&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.0.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Topology"><a href="#Topology" class="headerlink" title="Topology"></a>Topology</h4><p>创建一个启动类，程序启动时最先启动它。</p>
+<ul>
+<li><p>并在main方法中声明config对象，配置nimbus主机、zookeeper集群、worker数量等。</p>
+</li>
+<li><p>声明TopologyBuilder类最要是用来配置spout和bolt（spout和bolt使用自定义的类，方便数据处理）</p>
+</li>
+<li>如果是在本地启动则声明LocalCluster对象，如果是在生产环境中使用需要提交至Nimbus服务器上启动。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TopologyMain</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(TopologyMain.class);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Config config = <span class="keyword">new</span> Config();</span><br><span class="line">        config.put(Config.NIMBUS_HOST, Constants.STORM_SERVER); <span class="comment">//配置nimbus连接主机地址，比如：192.168.10.1</span></span><br><span class="line">        config.put(Config.NIMBUS_THRIFT_PORT, 	<span class="number">6627</span>);<span class="comment">//配置nimbus连接端口，默认 6627</span></span><br><span class="line">        config.put(Config.STORM_ZOOKEEPER_SERVERS, Arrays.asList(Constants.ZKSERVERS)); <span class="comment">//配置zookeeper连接主机地址，可以使用集合存放多个</span></span><br><span class="line">        config.put(Config.STORM_ZOOKEEPER_PORT, <span class="number">2181</span>); <span class="comment">//配置zookeeper连接端口，默认2181</span></span><br><span class="line">        config.setDebug(<span class="keyword">true</span>);</span><br><span class="line">        config.setNumWorkers(<span class="number">30</span>);</span><br><span class="line">        config.setMaxSpoutPending(<span class="number">50</span>);</span><br><span class="line"></span><br><span class="line">        TopologyBuilder builder = <span class="keyword">new</span> TopologyBuilder();</span><br><span class="line">        builder.setSpout(<span class="string">"spout"</span>, <span class="keyword">new</span> KafkaDataSpout(), <span class="number">3</span>);</span><br><span class="line">        builder.setBolt(<span class="string">"bolt"</span>, <span class="keyword">new</span> DataParseBolt(), <span class="number">3</span>).shuffleGrouping(<span class="string">"spout"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 运行拓扑</span></span><br><span class="line">            <span class="comment">// 有参数时，表示向集群提交作业，并把第一个参数当做topology名称</span></span><br><span class="line">            <span class="comment">// 没有参数时，本地提交</span></span><br><span class="line">            <span class="keyword">if</span> (args != <span class="keyword">null</span> &amp;&amp; args.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                logger.info(<span class="string">"运行远程模式"</span>);</span><br><span class="line">                StormSubmitter.submitTopology(args[<span class="number">0</span>], config, builder.createTopology());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 启动本地模式</span></span><br><span class="line">                logger.info(<span class="string">"运行本地模式"</span>);</span><br><span class="line">                LocalCluster cluster = <span class="keyword">new</span> LocalCluster();</span><br><span class="line">                cluster.submitTopology(<span class="string">"TopologyApp"</span>, config, builder.createTopology());</span><br><span class="line"><span class="comment">//				Thread.sleep(20000);</span></span><br><span class="line">                <span class="comment">// //关闭本地集群</span></span><br><span class="line"><span class="comment">//				cluster.shutdown();</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Spout"><a href="#Spout" class="headerlink" title="Spout"></a>Spout</h4><p>可以把它看出生产者，专门用来获取数数据的，由于我们的数据来源于kafka中，所以需要在这里连接kafka并将数据下发至bolt中。</p>
+<ul>
+<li>初始化kafka，获取到kafka连接对象。</li>
+<li>读取kafka数据，由于kafka中存储的是Protocol Buffer格式的数据，所以使用byte方式读取，准备在bolt中解析。</li>
+<li>下发至bolt</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> pancm</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>: KafkaDataSpout</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: 从kafka获取新增数据</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span>:1.0.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018年4月19日</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KafkaDataSpout</span> <span class="keyword">extends</span> <span class="title">BaseRichSpout</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">2548451744178936478L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(KafkaDataSpout.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> SpoutOutputCollector collector;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> KafkaConsumer&lt;String, <span class="keyword">byte</span>[]&gt; consumer;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ConsumerRecords&lt;String, <span class="keyword">byte</span>[]&gt; msgList;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">(Map map, TopologyContext arg1, SpoutOutputCollector collector)</span> </span>&#123;</span><br><span class="line">        kafkaInit();</span><br><span class="line">        <span class="keyword">this</span>.collector = collector;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nextTuple</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (; ; ) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                msgList = consumer.poll(<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">null</span> != msgList &amp;&amp; !msgList.isEmpty()) &#123;</span><br><span class="line">                    <span class="keyword">for</span> (ConsumerRecord&lt;String, <span class="keyword">byte</span>[]&gt; record : msgList)&#123;</span><br><span class="line">                        <span class="comment">// 原始数据</span></span><br><span class="line">                        <span class="keyword">byte</span>[] value = record.value();</span><br><span class="line">                        <span class="keyword">if</span> (value == <span class="keyword">null</span> || value.length == <span class="number">0</span>) &#123;</span><br><span class="line">                            <span class="keyword">return</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">this</span>.collector.emit(<span class="keyword">new</span> Values(value));</span><br><span class="line">                        consumer.commitAsync();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">                    logger.info(<span class="string">"未拉取到数据..."</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                logger.error(<span class="string">"消息队列处理异常:"</span>, e);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    TimeUnit.SECONDS.sleep(<span class="number">3</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e1) &#123;</span><br><span class="line">                    logger.error(<span class="string">"暂停失败!"</span>, e1);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">        declarer.declare(<span class="keyword">new</span> Fields(Constants.FIELD));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化kafka配置</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">kafkaInit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">        props.put(<span class="string">"bootstrap.servers"</span>, Constants.KAFKA_SERVERS);</span><br><span class="line">        props.put(<span class="string">"max.poll.records"</span>, <span class="number">10</span>);</span><br><span class="line">        props.put(<span class="string">"enable.auto.commit"</span>, <span class="keyword">false</span>);</span><br><span class="line">        props.put(<span class="string">"group.id"</span>, <span class="string">"groupA"</span>);</span><br><span class="line">        props.put(<span class="string">"auto.offset.reset"</span>, <span class="string">"earliest"</span>);</span><br><span class="line">        props.put(<span class="string">"key.deserializer"</span>, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">        props.put(<span class="string">"value.deserializer"</span>, <span class="string">"org.apache.kafka.common.serialization.ByteArrayDeserializer"</span>);</span><br><span class="line">        consumer = <span class="keyword">new</span> KafkaConsumer&lt;String, <span class="keyword">byte</span>[]&gt;(props);</span><br><span class="line">        String topic = Constants.TOPIC_NAME;</span><br><span class="line">        <span class="keyword">this</span>.consumer.subscribe(Arrays.asList(topic));</span><br><span class="line">        logger.info(<span class="string">"消息队列["</span> + topic + <span class="string">"] 开始初始化..."</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Bolt"><a href="#Bolt" class="headerlink" title="Bolt"></a>Bolt</h4><p>可以把他看作是消费者，它是专门用来处理数据的。获取到spout下发的数据后，进行解析处理，然后将数据去重在保存到mongo中。</p>
+<ul>
+<li>获取到spout数据。</li>
+<li><p>解析protocol buffer数据，可以参考官网提供的示例。官网：<a href="https://developers.google.com/protocol-buffers/docs/javatutorial" target="_blank" rel="noopener">Java示例</a></p>
+</li>
+<li><p>使用redis进行去重</p>
+</li>
+<li>保存至Mongo</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>: DataParseBolt</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: </span></span><br><span class="line"><span class="comment"> * 写入数据的bolt</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span>:1.0.0  </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> pancm</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018年4月19日</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataParseBolt</span> <span class="keyword">extends</span> <span class="title">BaseRichBolt</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">6542256546124282695L</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(DataParseBolt.class);</span><br><span class="line">	<span class="meta">@SuppressWarnings</span>(<span class="string">"rawtypes"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">(Map map, TopologyContext arg1, OutputCollector collector)</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Tuple tuple)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] bytes = tuple.getBinaryByField(Constants.FIELD);</span><br><span class="line">		<span class="comment">//业务逻辑处理,这里就简单的打印一下</span></span><br><span class="line">		doSomeThing(bytes);</span><br><span class="line"><span class="comment">//		logger.info("接收的消息:&#123;&#125;", new String(bytes));</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * cleanup是IBolt接口中定义,用于释放bolt占用的资源。</span></span><br><span class="line"><span class="comment">	 * Storm在终止一个bolt之前会调用这个方法。</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cleanup</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer arg0)</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doSomeThing</span><span class="params">(<span class="keyword">byte</span>[] value)</span></span>&#123;</span><br><span class="line">		<span class="keyword">byte</span>[] bytes = DataUtil.subByte(value, <span class="number">0</span>, Constants.LEN);</span><br><span class="line">		<span class="keyword">int</span> sum = DataUtil.byteArrayToInt(bytes); <span class="comment">// 这一条消息里面有 sum条数据</span></span><br><span class="line">		<span class="keyword">int</span> offset = Constants.LEN;  <span class="comment">//byte数组偏移量</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= sum; i ++)&#123;</span><br><span class="line">			<span class="keyword">byte</span>[] dataLenth = DataUtil.subByte(value, offset, Constants.LEN); <span class="comment">// data数据的长度</span></span><br><span class="line">			<span class="keyword">int</span> i1 = DataUtil.byteArrayToInt(dataLenth); <span class="comment">// data数据的长度</span></span><br><span class="line">			offset += Constants.LEN;</span><br><span class="line">			<span class="keyword">byte</span>[] data = DataUtil.subByte(value, offset, i1);</span><br><span class="line">			offset += i1;</span><br><span class="line">			<span class="comment">// data 转 对象 ， 祝好运</span></span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				SensorLog.SENSOR_LOG sensorLog = SensorLog.SENSOR_LOG.parseFrom(data);</span><br><span class="line">				parseResult(sensorLog);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InvalidProtocolBufferException e) &#123;</span><br><span class="line">				logger.info(<span class="string">"sensorLog对象转换错误：&#123;&#125;"</span>, e.getMessage());</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 处理转换后的结果</span></span><br><span class="line"><span class="comment">	 * 然后进行保存</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> sensorLog 结果对象</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parseResult</span><span class="params">(SensorLog.SENSOR_LOG sensorLog)</span></span>&#123;</span><br><span class="line">		ParseResult parseResult = <span class="keyword">new</span> ParseResult();</span><br><span class="line">		SensorLog.WEBLOG skyeyeWeblog = sensorLog.getSkyeyeWeblog();</span><br><span class="line">		String uri = UrlUtils.decode(skyeyeWeblog.getUri().toStringUtf8());</span><br><span class="line">		String urlPath = <span class="string">"http://"</span> + skyeyeWeblog.getHost()+ uri;</span><br><span class="line">		URL url = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			url = <span class="keyword">new</span> URL(urlPath);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">			logger.info(<span class="string">"url error: &#123;&#125;"</span>, urlPath);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 过滤规则 （没有问号但又&amp;  || 以？结尾 || host为空 || 状态码不以2和3开头）</span></span><br><span class="line">		<span class="keyword">if</span> (uri.indexOf(<span class="string">"?"</span>) == -<span class="number">1</span> &amp;&amp; uri.contains(<span class="string">"&amp;"</span>) || uri.endsWith(<span class="string">"?"</span>)</span><br><span class="line">				|| url.getHost() == <span class="keyword">null</span> || <span class="string">""</span>.equals(url.getHost())) <span class="keyword">return</span>;</span><br><span class="line">		<span class="keyword">if</span> (skyeyeWeblog.getStatus() &lt; <span class="number">200</span> || skyeyeWeblog.getStatus() &gt;= <span class="number">400</span>) <span class="keyword">return</span>;</span><br><span class="line">		<span class="keyword">switch</span> (skyeyeWeblog.getMethod())&#123;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">"GET"</span>:</span><br><span class="line">				parseResult.setMethod(<span class="string">"GET"</span>);</span><br><span class="line">				parseResult.setRawQuery(url.getQuery() == <span class="keyword">null</span> ? <span class="string">""</span> : url.getQuery()); <span class="comment">// uri问号后面就是参数</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">case</span> <span class="string">"POST"</span>:</span><br><span class="line">				parseResult.setMethod(<span class="string">"POST"</span>);</span><br><span class="line">				parseResult.setRawQuery(skyeyeWeblog.getData().toStringUtf8());</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			<span class="keyword">default</span>:</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		parseResult.setHost(url.getProtocol() + <span class="string">"://"</span> + url.getHost());</span><br><span class="line">		parseResult.setContentType(skyeyeWeblog.getContentType());</span><br><span class="line">		parseResult.setVendorId(skyeyeWeblog.getVendorId());</span><br><span class="line">		parseResult.setPath(url.getPath());</span><br><span class="line">		parseResult.setStatusCode(skyeyeWeblog.getStatus());</span><br><span class="line">		parseResult.setUrl(url.toString());</span><br><span class="line">		String filterQueryKey = <span class="string">""</span>;</span><br><span class="line">		UrlUtil.UrlEntity parse = UrlUtil.parse(parseResult.getUrl());</span><br><span class="line">		<span class="keyword">if</span> (parse.params != <span class="keyword">null</span> &amp;&amp; parse.params.size() &gt; <span class="number">0</span>)&#123;</span><br><span class="line">			filterQueryKey = String.join(<span class="string">"&amp;"</span>, parse.params.keySet());</span><br><span class="line">		&#125;</span><br><span class="line">		Result result = <span class="keyword">new</span> Result();</span><br><span class="line">		result.setTime(<span class="keyword">new</span> Date().getTime());</span><br><span class="line">		result.setParseResult(parseResult);</span><br><span class="line">		String filterUrl = url.getProtocol() + <span class="string">"://"</span> + url.getHost() + NewPatterns.parsePattern(parseResult.getPath()) + <span class="string">"?"</span> + filterQueryKey;</span><br><span class="line">		result.setUniqueUrl(parseResult.getUrl());</span><br><span class="line">		result.setRegexPath(filterUrl);</span><br><span class="line">		result.setUniqueMd5(MD5Util.MD5(filterUrl));</span><br><span class="line">		Jedis jedis = JedisManager.getJedis();</span><br><span class="line">		<span class="comment">// 去重 + 保存</span></span><br><span class="line">		Boolean bool = jedis.hexists(Constants.RedisConfig.KEY, result.getUniqueMd5());</span><br><span class="line">		<span class="keyword">if</span> (!bool)&#123;</span><br><span class="line">			jedis.hset(Constants.RedisConfig.KEY, result.getUniqueMd5(), <span class="string">"1"</span>);</span><br><span class="line">			MongoManager.insert(result);</span><br><span class="line">		&#125;</span><br><span class="line">		JedisManager.close(jedis);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="打包部署"><a href="#打包部署" class="headerlink" title="打包部署"></a>打包部署</h4><ol>
+<li>使用storm官方提供的maven插件进行打包。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugin&gt;</span><br><span class="line">    &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;</span><br><span class="line">    &lt;configuration&gt;</span><br><span class="line">      &lt;descriptorRefs&gt;  </span><br><span class="line">        &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</span><br><span class="line">      &lt;/descriptorRefs&gt;</span><br><span class="line">      &lt;archive&gt;</span><br><span class="line">        &lt;manifest&gt;</span><br><span class="line">          &lt;mainClass&gt;com.path.to.main.Class&lt;/mainClass&gt;</span><br><span class="line">        &lt;/manifest&gt;</span><br><span class="line">      &lt;/archive&gt;</span><br><span class="line">    &lt;/configuration&gt;</span><br><span class="line">  &lt;/plugin&gt;</span><br></pre></td></tr></table></figure>
+<p>然后运行 mvn assembly:assembly 来获取适当打包的 jar. 确保您 <a href="http://maven.apache.org/plugins/maven-assembly-plugin/examples/single/including-and-excluding-artifacts.html" target="_blank" rel="noopener">排除了</a> Storm jar, 因为群集已经在类路径上有 Storm。</p>
+<ol start="2">
+<li>排除Storm.jar</li>
+</ol>
+<p><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703114928.png" alt="排除Storm.jar"></p>
+<p>在项目的target目录下找到已经打包好的jar文件。</p>
+<p><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703115340.png" alt="打包的jar"></p>
+<p>插件会自动生成两种jar文件，而我们需要的是包含第三方jar包的jar文件。</p>
+<ol start="3">
+<li>将文件上传至nimbus服务器上进行部署</li>
+</ol>
+<blockquote>
+<p>scp storm-1.0-SNAPSHOT-jar-with-dependencies.jar <a href="mailto:root@192.168.23.139" target="_blank" rel="noopener">root@192.168.23.139</a>:/home</p>
+</blockquote>
+<ol start="4">
+<li>将文件移入storm的bin目录下，使用以下命令进行部署运行</li>
+</ol>
+<blockquote>
+<p> ./storm jar jar文件 启动类的路径    topology名称</p>
+</blockquote>
+<blockquote>
+<p>./storm jar storm-1.0-SNAPSHOT-jar-with-dependencies.jar com.weijunzhe.TopologyMain kafka_storm</p>
+</blockquote>
+<p>输出以下内容说明部署成功</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@redis bin]# ./storm jar storm-<span class="number">1</span><span class="variable">.0</span>-SNAPSHOT-jar-<span class="keyword">with</span>-dependencies<span class="variable">.jar</span> com<span class="variable">.weijunzhe</span><span class="variable">.TopologyMain</span> storm-kafka</span><br><span class="line">Running: java -client -Ddaemon<span class="variable">.name</span>= -Dstorm<span class="variable">.options</span>= -Dstorm<span class="variable">.home</span>=/home/storm/apache-storm-<span class="number">1</span><span class="variable">.2</span><span class="variable">.2</span> -Dstorm<span class="variable">.log</span><span class="variable">.dir</span>=/home/storm/apache-storm-<span class="number">1</span><span class="variable">.2</span><span class="variable">.2</span>/logs -Djava<span class="variable">.library</span><span class="variable">.path</span>=/usr/<span class="keyword">local</span>/lib:/opt/<span class="keyword">local</span>/lib:/usr/lib -Dstorm<span class="variable">.conf</span><span class="variable">.file</span>= -cp /home/storm/apache-storm-<span class="number">1</span><span class="variable">.2</span><span class="variable">.2</span><span class="comment">/*:/home/storm/apache-storm-1.2.2/lib/*:/home/storm/apache-storm-1.2.2/extlib/*:storm-1.0-SNAPSHOT-jar-with-dependencies.jar:/home/storm/apache-storm-1.2.2/conf:/home/storm/apache-storm-1.2.2/bin -Dstorm.jar=storm-1.0-SNAPSHOT-jar-with-dependencies.jar -Dstorm.dependency.jars= -Dstorm.dependency.artifacts=&#123;&#125; com.weijunzhe.TopologyMain storm-kafka</span></span><br><span class="line"><span class="comment">427  [main] INFO  c.w.TopologyMain - 运行远程模式</span></span><br><span class="line"><span class="comment">526  [main] WARN  o.a.s.u.Utils - STORM-VERSION new 1.2.2 old null</span></span><br><span class="line"><span class="comment">546  [main] INFO  o.a.s.StormSubmitter - Generated ZooKeeper secret payload for MD5-digest: -9189552336942843022:-6760854273759919878</span></span><br><span class="line"><span class="comment">604  [main] WARN  o.a.s.u.NimbusClient - Using deprecated config nimbus.host for backward compatibility. Please update your storm.yaml so it only has config nimbus.seeds</span></span><br><span class="line"><span class="comment">629  [main] INFO  o.a.s.u.NimbusClient - Found leader nimbus : redis:6627</span></span><br><span class="line"><span class="comment">642  [main] INFO  o.a.s.s.a.AuthUtils - Got AutoCreds []</span></span><br><span class="line"><span class="comment">642  [main] WARN  o.a.s.u.NimbusClient - Using deprecated config nimbus.host for backward compatibility. Please update your storm.yaml so it only has config nimbus.seeds</span></span><br><span class="line"><span class="comment">644  [main] INFO  o.a.s.u.NimbusClient - Found leader nimbus : redis:6627</span></span><br><span class="line"><span class="comment">658  [main] INFO  o.a.s.StormSubmitter - Uploading dependencies - jars...</span></span><br><span class="line"><span class="comment">659  [main] INFO  o.a.s.StormSubmitter - Uploading dependencies - artifacts...</span></span><br><span class="line"><span class="comment">659  [main] INFO  o.a.s.StormSubmitter - Dependency Blob keys - jars : [] / artifacts : []</span></span><br><span class="line"><span class="comment">664  [main] INFO  o.a.s.StormSubmitter - Uploading topology jar storm-1.0-SNAPSHOT-jar-with-dependencies.jar to assigned location: /home/storm/apache-storm-1.2.2/localdir/nimbus/inbox/stormjar-0e80a2ae-e7ab-4b7f-b84c-ef821ac11ab5.jar</span></span><br><span class="line"><span class="comment">856  [main] INFO  o.a.s.StormSubmitter - Successfully uploaded topology jar to assigned location: /home/storm/apache-storm-1.2.2/localdir/nimbus/inbox/stormjar-0e80a2ae-e7ab-4b7f-b84c-ef821ac11ab5.jar</span></span><br><span class="line"><span class="comment">857  [main] WARN  o.a.s.u.Utils - STORM-VERSION new 1.2.2 old 1.2.2</span></span><br><span class="line"><span class="comment">981  [main] INFO  o.a.s.StormSubmitter - Finished submitting topology: storm-kafka</span></span><br></pre></td></tr></table></figure>
+<p>如果出现以下内容，说明没有找到启动类的main方法，请检查启动类的路径是否输入正确。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Running: java -client -Ddaemon<span class="variable">.name</span>= -Dstorm<span class="variable">.options</span>= -Dstorm<span class="variable">.home</span>=/home/storm/apache-storm-<span class="number">1</span><span class="variable">.2</span><span class="variable">.2</span> -Dstorm<span class="variable">.log</span><span class="variable">.dir</span>=/home/storm/apache-storm-<span class="number">1</span><span class="variable">.2</span><span class="variable">.2</span>/logs -Djava<span class="variable">.library</span><span class="variable">.path</span>=/usr/<span class="keyword">local</span>/lib:/opt/<span class="keyword">local</span>/lib:/usr/lib -Dstorm<span class="variable">.conf</span><span class="variable">.file</span>= -cp /home/storm/apache-storm-<span class="number">1</span><span class="variable">.2</span><span class="variable">.2</span><span class="comment">/*:/home/storm/apache-storm-1.2.2/lib/*:/home/storm/apache-storm-1.2.2/extlib/*:storm-1.0-SNAPSHOT-jar-with-dependencies.jar:/home/storm/apache-storm-1.2.2/conf:/home/storm/apache-storm-1.2.2/bin -Dstorm.jar=storm-1.0-SNAPSHOT-jar-with-dependencies.jar -Dstorm.dependency.jars= -Dstorm.dependency.artifacts=&#123;&#125; com.weijunzhe.TopologyMa storm-kafka</span></span><br><span class="line"><span class="comment">Error: Could not find or load main class com.weijunzhe.TopologyMa</span></span><br><span class="line"><span class="comment">You have new mail in /var/spool/mail/root</span></span><br></pre></td></tr></table></figure>
+<p>如果出现<strong>本地模式启动</strong> 则表示你没有输入topology的名称，需要在启动命令后输入topology名称。</p>
+<ol start="5">
+<li>在storm的web界面中查看topology运行状态</li>
+</ol>
+<p><img src="https://weijunzhe.oss-cn-beijing.aliyuncs.com/blog/2019/07/03/TIM%E6%88%AA%E5%9B%BE20190703122528.png" alt="topology运行状态"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="weijunzhe 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="weijunzhe 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/storm、kafka/" rel="tag"># storm、kafka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/28/Storm集群搭建/" rel="next" title="Storm集群搭建">
+                <i class="fa fa-chevron-left"></i> Storm集群搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">weijunzhe</p>
+              <p class="site-description motion-element" itemprop="description">weijunzhe</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="/wechat" target="_blank" title="Wechat">
+                      
+                        <i class="fa fa-fw fa-weixin"></i>Wechat</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/weijunzhe" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1104774305@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-mobile"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/qq_37753580" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-bell"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+          <br>
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=408280420&auto=1&height=66"></iframe>
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于storm"><span class="nav-number">2.</span> <span class="nav-text">关于storm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于kafka"><span class="nav-number">3.</span> <span class="nav-text">关于kafka</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#项目搭建"><span class="nav-number">4.</span> <span class="nav-text">项目搭建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topology"><span class="nav-number">5.</span> <span class="nav-text">Topology</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Spout"><span class="nav-number">6.</span> <span class="nav-text">Spout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bolt"><span class="nav-number">7.</span> <span class="nav-text">Bolt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#打包部署"><span class="nav-number">8.</span> <span class="nav-text">打包部署</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 
+<a href="http://www.miitbeian.gov.cn/">京ICP备18031051号-1</a> 
+<span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">weijunzhe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
