@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,">
+  <meta name="keywords" content="堆栈,数据存储,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="谈谈对java的理解java本身是面向对象语言，最显著的特征是一次编译，到处运行”，能够非常容易的进行跨平台操作，还有一个特点就是垃圾回收机制，这个特点能够使得开发人员不用太在意内存的分配和回收。">
-<meta name="keywords" content="java">
+<meta name="description" content="数据存储的位置  程序运行时，对象是怎么被安排放置的呢？内存是怎么被分配的呢？根据这个问题，我查阅了《Java编程思想》一书，在22页看到一下内容。">
+<meta name="keywords" content="堆栈,数据存储">
 <meta property="og:type" content="article">
-<meta property="og:title" content="谈谈对java的理解">
-<meta property="og:url" content="http://yangweijun.top/2019/01/15/谈谈对Java的理解/index.html">
+<meta property="og:title" content="数据存储的位置">
+<meta property="og:url" content="http://yangweijun.top/2019/12/15/数据存储的位置/index.html">
 <meta property="og:site_name" content="weijunzhe&#39;s blog">
-<meta property="og:description" content="谈谈对java的理解java本身是面向对象语言，最显著的特征是一次编译，到处运行”，能够非常容易的进行跨平台操作，还有一个特点就是垃圾回收机制，这个特点能够使得开发人员不用太在意内存的分配和回收。">
+<meta property="og:description" content="数据存储的位置  程序运行时，对象是怎么被安排放置的呢？内存是怎么被分配的呢？根据这个问题，我查阅了《Java编程思想》一书，在22页看到一下内容。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-03T08:00:48.389Z">
+<meta property="og:updated_time" content="2019-12-15T06:36:17.530Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="谈谈对java的理解">
-<meta name="twitter:description" content="谈谈对java的理解java本身是面向对象语言，最显著的特征是一次编译，到处运行”，能够非常容易的进行跨平台操作，还有一个特点就是垃圾回收机制，这个特点能够使得开发人员不用太在意内存的分配和回收。">
+<meta name="twitter:title" content="数据存储的位置">
+<meta name="twitter:description" content="数据存储的位置  程序运行时，对象是怎么被安排放置的呢？内存是怎么被分配的呢？根据这个问题，我查阅了《Java编程思想》一书，在22页看到一下内容。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yangweijun.top/2019/01/15/谈谈对Java的理解/">
+  <link rel="canonical" href="http://yangweijun.top/2019/12/15/数据存储的位置/">
 
 
 
 
 
-  <title>谈谈对java的理解 | weijunzhe's blog</title>
+  <title>数据存储的位置 | weijunzhe's blog</title>
   
 
 
@@ -273,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/01/15/谈谈对Java的理解/">
+    <link itemprop="mainEntityOfPage" href="http://yangweijun.top/2019/12/15/数据存储的位置/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="weijunzhe">
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">谈谈对java的理解</h1>
+          <h1 class="post-title" itemprop="name headline">数据存储的位置</h1>
         
 
         <div class="post-meta">
@@ -302,8 +302,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-15T11:21:07+08:00">
-                2019-01-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T14:33:17+08:00">
+                2019-12-15
               </time>
             
 
@@ -325,8 +325,19 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
+                  <a href="/categories/堆栈/" itemprop="url" rel="index">
+                    <span itemprop="name">堆栈</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/堆栈/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -362,24 +373,71 @@
       
 
       
-        <h3 id="谈谈对java的理解"><a href="#谈谈对java的理解" class="headerlink" title="谈谈对java的理解"></a>谈谈对java的理解</h3><p><strong>java</strong>本身是面向对象语言，最显著的特征是<strong>一次编译，到处运行”</strong>，能够非常容易的进行跨平台操作，还有一个特点就是<strong>垃圾回收机制</strong>，这个特点能够使得开发人员不用太在意内存的分配和回收。<br><a id="more"></a><br>我们日常经常会接触到<strong>jdk</strong>、<strong>jre</strong>、<strong>jvm</strong>。下面我们来看看两者的区别。</p>
-<h4 id="jdk-java开发工具包"><a href="#jdk-java开发工具包" class="headerlink" title="jdk | java开发工具包"></a>jdk | java开发工具包</h4><p><strong>jdk</strong>里面包含<strong>jre</strong>，除此之外还包含着开发所需要的一些<strong>帮助文档</strong>、<strong>诊断工具</strong>。</p>
-<h4 id="jre-java运行时环境"><a href="#jre-java运行时环境" class="headerlink" title="jre |  java运行时环境"></a>jre |  java运行时环境</h4><p><strong>jre</strong>包含了<strong>JVM </strong>和 <strong>Java</strong> 类库，以及一些模块等。</p>
-<h4 id="jvm-java虚拟机"><a href="#jvm-java虚拟机" class="headerlink" title="jvm | java虚拟机"></a>jvm | java虚拟机</h4><p><strong>jvm</strong>内嵌解释器，可以将字节码转换成为最终的机器码。大多数情况使用的 Oracle JDK 提供的 Hotspot jvm ,都提供了 JIT（Just-In-Time）编译器，也就是通常说的动态编译器，JIT能够在运行时将热点代码编译成机器码。</p>
-<blockquote>
-<p>在开发时，记得一定要先导入 jdk 路径，不然是无法编译的。</p>
-</blockquote>
-<h4 id="java程序生命周期"><a href="#java程序生命周期" class="headerlink" title="java程序生命周期"></a>java程序生命周期</h4><ol>
-<li>首先开发出源代码</li>
-<li>使用<strong>javac</strong>将源代码进行编译成.class文件</li>
-<li>使用<strong>java</strong>命令将编译后的.class文件运行</li>
-<li>最后jvm会自动将.class文件转换成最终的机器码。</li>
-<li>运行结束</li>
-</ol>
-<h4 id="面向对象的三大特征"><a href="#面向对象的三大特征" class="headerlink" title="面向对象的三大特征"></a>面向对象的三大特征</h4><blockquote>
-<p>封装、继承、多态</p>
-</blockquote>
-<p>java目前就先总结这里。</p>
+        <h2 id="数据存储的位置"><a href="#数据存储的位置" class="headerlink" title="数据存储的位置"></a>数据存储的位置</h2><p>  程序运行时，对象是怎么被安排放置的呢？内存是怎么被分配的呢？根据这个问题，我查阅了《Java编程思想》一书，在22页看到一下内容。<br><a id="more"></a><br>有五个不同的地方可以存储数据。</p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>它是最快的存储区，因为它位于处理器内部，但是寄存器的数量极其有限，所以寄存器是根据需求进行分配的。不能直接进行控制，也不能在程序中感觉到它的存在（在C和C++中允许您向编译器建议寄存器的分配方式）</p>
+<h3 id="堆栈"><a href="#堆栈" class="headerlink" title="堆栈"></a>堆栈</h3><p>位于通用RAM（随机访问存储器）中，通过<strong>堆栈指针</strong>可以从处理器那里获取直接支持。<strong>堆栈指针</strong>若向下移动，则分配新的内存；若向上移动，则释放那些内存。这是一种快速有效的分配存储方法，仅次于寄存器。创建程序时，Java系统必须知道存储在堆栈中内所有项的确切生命周期，以便上下移动堆栈指针。这一约束限制了程序的灵活性，所以虽然某些Java数据存储于堆栈中–特别是某些对象引用，但是Java对象并不存储在其中。</p>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p>一种通用的内存池（也位于RAM区），用于存放所有的Java对象。堆不同于堆栈的好处是：编译器不需要知道存储的数据在堆里的存活多长时间。因此，在堆里分配存储有很大的灵活性。当需要一个对象时，只需要new写一行简单的代码，当执行这行代码时，会自动在堆里进行存储分配。当然，这种灵活性也要付出相应的代价：用堆进行存储分配和清理可能会比用堆栈进行存储分配需要更多的时间（Java不可以像C++中那样直接在栈中创建对象）。</p>
+<h3 id="常量存储"><a href="#常量存储" class="headerlink" title="常量存储"></a>常量存储</h3><p>常量值通常直接存放在程序代码内部，这样做时安全的，因为它们永远不会被改变，有时，在嵌入式系统中，常量本身会和其他部分隔离开，所以在这种情况下，可以选择将其存放在ROM（只读存储器）中。</p>
+<h3 id="非RAM存储"><a href="#非RAM存储" class="headerlink" title="非RAM存储"></a>非RAM存储</h3><p>如果数据完全存活于程序之外，那么它可以不受程序的任何控制，在程序没有运行时也可也存在。其中两个基本的例子是<strong>流对象</strong>和<strong>持久化对象</strong>。在流对象中，对象转化成字节流，通常被发送给另一台机器。在<strong>持久化对象</strong>中，对象被存放于磁盘上，因此，即使程序终止，它们仍可以保持自己的状态。这种存储方式的技巧在于：把对象转化成可以存放在其他媒介上的事务，在需要时，可恢复成常规的、基于RAM的对象。Java提供了对轻量级持久化的支持，而诸如JDBC和Hibernate这样的机制提供了更加复杂的对在数据库中储存和读取对象信息的支持。</p>
+<h3 id="特例：基本类型"><a href="#特例：基本类型" class="headerlink" title="特例：基本类型"></a>特例：基本类型</h3><p>在程序设计中经常用到一系列类型，它们需要特殊对待。可以把他们想象成“基本”类型。之所以特殊对待，是因为new将对象存储在<strong>堆</strong>里，故用new创建一个对象–特别是小的、简单的变量，往往不是很有效。因此，对于这些类型的，Java采用与C和C++相同的方法。也就是说，不用new来创建变量，而是创建一个并非是引用的“自动”变量。这个变量直接存储“值”，并非置于堆栈中，因此更加高效。</p>
+<p>Java要确定每种基本类型所占存储空间的大小。他们的大小并不像其他大多数语言那样随机器硬件架构的变化而变化。这种所占存储空间大小的不变性是Java程序比其他大多数语言编写的程序根具有可移植性的原因之一。</p>
+<table>
+<thead>
+<tr>
+<th>基本类型</th>
+<th>大小</th>
+<th>包装器类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boolean</td>
+<td>–</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td>char</td>
+<td>16-bit</td>
+<td>Character</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>8 bits</td>
+<td>Byte</td>
+</tr>
+<tr>
+<td>short</td>
+<td>16 bits</td>
+<td>Short</td>
+</tr>
+<tr>
+<td>int</td>
+<td>32 bits</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>long</td>
+<td>64 bits</td>
+<td>Long</td>
+</tr>
+<tr>
+<td>float</td>
+<td>32 bits</td>
+<td>Float</td>
+</tr>
+<tr>
+<td>double</td>
+<td>64 bits</td>
+<td>Double</td>
+</tr>
+<tr>
+<td>void</td>
+<td>–</td>
+<td>Void</td>
+</tr>
+</tbody>
+</table>
+<p>所有数值类型都有正负号，所以不要去寻找无符号的数值类型。</p>
 
       
     </div>
@@ -444,7 +502,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+            <a href="/tags/堆栈/" rel="tag"><i class="fa fa-tag"></i> 堆栈</a>
+          
+            <a href="/tags/数据存储/" rel="tag"><i class="fa fa-tag"></i> 数据存储</a>
           
         </div>
       
@@ -457,8 +517,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/01/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2019/07/05/mysql读写分离/" rel="next" title="mysql读写分离">
+                <i class="fa fa-chevron-left"></i> mysql读写分离
               </a>
             
           </div>
@@ -466,10 +526,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/16/知识图谱相关资料整理/" rel="prev" title="知识图谱相关资料整理">
-                知识图谱相关资料整理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -576,7 +632,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -587,7 +643,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -598,7 +654,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -667,7 +723,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#谈谈对java的理解"><span class="nav-number">1.</span> <span class="nav-text">谈谈对java的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jdk-java开发工具包"><span class="nav-number">1.1.</span> <span class="nav-text">jdk | java开发工具包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jre-java运行时环境"><span class="nav-number">1.2.</span> <span class="nav-text">jre |  java运行时环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jvm-java虚拟机"><span class="nav-number">1.3.</span> <span class="nav-text">jvm | java虚拟机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java程序生命周期"><span class="nav-number">1.4.</span> <span class="nav-text">java程序生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面向对象的三大特征"><span class="nav-number">1.5.</span> <span class="nav-text">面向对象的三大特征</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据存储的位置"><span class="nav-number">1.</span> <span class="nav-text">数据存储的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#寄存器"><span class="nav-number">1.1.</span> <span class="nav-text">寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆栈"><span class="nav-number">1.2.</span> <span class="nav-text">堆栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆"><span class="nav-number">1.3.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常量存储"><span class="nav-number">1.4.</span> <span class="nav-text">常量存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非RAM存储"><span class="nav-number">1.5.</span> <span class="nav-text">非RAM存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特例：基本类型"><span class="nav-number">1.6.</span> <span class="nav-text">特例：基本类型</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -871,9 +927,9 @@ var jiathis_config={
       <script type="text/javascript">
         var commenthub_id = '34541958';
         var commenthub_website = 'http://yangweijun.top';
-        var commenthub_identifier = '2019/01/15/谈谈对Java的理解/';
-        var commenthub_url = 'http://yangweijun.top/2019/01/15/谈谈对Java的理解/';
-        var commenthub_title = '谈谈对java的理解';
+        var commenthub_identifier = '2019/12/15/数据存储的位置/';
+        var commenthub_url = 'http://yangweijun.top/2019/12/15/数据存储的位置/';
+        var commenthub_title = '数据存储的位置';
         var dsq = document.createElement('script');
             dsq.type = 'text/javascript';
             dsq.async = true;
